@@ -473,9 +473,9 @@ var appRoutes = [{
         path: "LaserCutMazes/help",
         component: __WEBPACK_IMPORTED_MODULE_6_app_help_help_component__["a" /* HelpComponent */]
     }, {
-        path: "",
+        path: "LaserCutMazes",
         redirectTo: "LaserCutMazes/welcome",
-        pathMatch: "full"
+        pathMatch: "prefix"
     }];
 var AppModule = /** @class */ (function () {
     function AppModule() {
