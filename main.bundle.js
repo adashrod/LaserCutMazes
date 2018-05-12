@@ -377,7 +377,7 @@ var PrimsAlgorithm = /** @class */ (function (_super) {
 /***/ "./src/app/app.component.css":
 /***/ (function(module, exports) {
 
-module.exports = ".end-container {\n    width: 100%;\n    height: 170px;\n    background: #5c2018;\n}\n\nheader, footer {\n    width: 800px;\n    height: 100%;\n    background: #5c2018 url(\"/assets/logo1.png\") no-repeat 0 0;\n    margin: 0 auto;\n    color: #bc4639;\n    font-size: 34px;\n}\n\n.page-title, .copyright {\n    padding-left: 180px;\n}\n\n.copyright {\n    font-size: 16px;\n    padding-top: 10px;\n}\n\nheader nav {\n    padding: 75px 0 0 500px;\n}\n\nfooter nav {\n    padding: 75px 0 0 200px;\n}\n\nnav a {\n    color: #4285f4;\n    font-size: 16px;\n}\n\nnav a.active {\n    font-style: italic;\n}\n\n.main-body {\n    border-top: 1px solid #bc4639;\n    margin: 0 auto;\n    padding: 5px;\n    width: 800px;\n    background: #bc4639;\n}\n"
+module.exports = ".end-container {\n    width: 100%;\n    height: 170px;\n    background: #5c2018;\n}\n\nheader, footer {\n    width: 800px;\n    height: 100%;\n    background: #5c2018 url(\"https://adashrod.github.io/LaserCutMazes/assets/logo1.png\") no-repeat 0 0;\n    margin: 0 auto;\n    color: #bc4639;\n    font-size: 34px;\n}\n\n.page-title, .copyright {\n    padding-left: 180px;\n}\n\n.copyright {\n    font-size: 16px;\n    padding-top: 10px;\n}\n\nheader nav {\n    padding: 75px 0 0 500px;\n}\n\nfooter nav {\n    padding: 75px 0 0 200px;\n}\n\nnav a {\n    color: #4285f4;\n    font-size: 16px;\n}\n\nnav a.active {\n    font-style: italic;\n}\n\n.main-body {\n    border-top: 1px solid #bc4639;\n    margin: 0 auto;\n    padding: 5px;\n    width: 800px;\n    background: #bc4639;\n}\n"
 
 /***/ }),
 
@@ -2979,8 +2979,12 @@ var WelcomeComponent = /** @class */ (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return environment; });
+// The file contents for the current environment will overwrite these during build.
+// The build system defaults to the dev environment which uses `environment.ts`, but if you do
+// `ng build --env=prod` then `environment.prod.ts` will be used instead.
+// The list of which env maps to which file can be found in `.angular-cli.json`.
 var environment = {
-    production: true
+    production: false
 };
 
 
