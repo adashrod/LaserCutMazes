@@ -27,7 +27,7 @@ module.exports = ""
 /***/ "./src/app/about/about.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n    The Laser-Cut Maze Designer was created by Aaron Rodriguez.\n</p>\n<p>\n    The source code can be found on <a href=\"https://github.com/adashrod/LaserCutMazesAngular\" target=\"_blank\">GitHub</a>.\n</p>\n<p>\n    His other projects can also be found on <a href=\"https://github.com/adashrod\" target=\"_blank\">GitHub</a>.\n</p>\n"
+module.exports = "<p>\n    The Laser-Cut Maze Designer was created by Aaron Rodriguez.\n</p>\n<p>\n    The source code can be found on <a href=\"https://github.com/adashrod/LaserCutMazesAngular\" target=\"_blank\">GitHub</a>. If you find a bug and would like to\n    submit a report, you can do so <a href=\"https://github.com/adashrod/LaserCutMazesAngular/issues\" target=\"_blank\">here</a>.\n</p>\n<p>\n    Aaron's other projects can also be found on <a href=\"https://github.com/adashrod\" target=\"_blank\">GitHub</a>.\n</p>\n"
 
 /***/ }),
 
