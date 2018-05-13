@@ -17,6 +17,55 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 
 /***/ }),
 
+/***/ "./src/app/about/about.component.css":
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/about/about.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<p>\n    The Laser-Cut Maze Designer was created by Aaron Rodriguez.\n</p>\n<p>\n    The source code can be found on <a href=\"https://github.com/adashrod/LaserCutMazesAngular\" target=\"_blank\">GitHub</a>.\n</p>\n<p>\n    His other projects can also be found on <a href=\"https://github.com/adashrod\" target=\"_blank\">GitHub</a>.\n</p>\n"
+
+/***/ }),
+
+/***/ "./src/app/about/about.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AboutComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var AboutComponent = /** @class */ (function () {
+    function AboutComponent() {
+    }
+    AboutComponent.prototype.ngOnInit = function () { };
+    AboutComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+            selector: "app-about",
+            template: __webpack_require__("./src/app/about/about.component.html"),
+            styles: [__webpack_require__("./src/app/about/about.component.css")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], AboutComponent);
+    return AboutComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/algorithms/depth-first-search-algorithm.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -384,7 +433,7 @@ module.exports = ".end-container {\n    width: 100%;\n    height: 170px;\n    ba
 /***/ "./src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"end-container\">\n    <header>\n        <div class=\"page-title\">Laser-Cut Blueprints: Maze Builder</div>\n        <nav>\n            <a routerLink=\"/LaserCutMazes/welcome\" routerLinkActive=\"active\">Home</a>\n            <a routerLink=\"/LaserCutMazes/builder\" routerLinkActive=\"active\">Maze Builder</a>\n            <a routerLink=\"/LaserCutMazes/help\" routerLinkActive=\"active\">Help</a>\n        </nav>\n    </header>\n</div>\n<div class=\"main-body\">\n    <router-outlet></router-outlet>\n</div>\n<div class=\"end-container\">\n    <footer>\n        <div class=\"copyright\">&copy; 2018 Aaron Rodriguez</div>\n        <nav>\n            <a routerLink=\"/LaserCutMazes/welcome\" routerLinkActive=\"active\">Home</a>\n            <a routerLink=\"/LaserCutMazes/builder\" routerLinkActive=\"active\">Maze Builder</a>\n            <a routerLink=\"/LaserCutMazes/help\" routerLinkActive=\"active\">Help</a>\n        </nav>\n    </footer>\n</div>\n"
+module.exports = "<div class=\"end-container\">\n    <header>\n        <div class=\"page-title\">Laser-Cut Maze Designer</div>\n        <nav>\n            <a routerLink=\"/LaserCutMazes/welcome\" routerLinkActive=\"active\">Home</a>\n            <a routerLink=\"/LaserCutMazes/designer\" routerLinkActive=\"active\">Maze Designer</a>\n            <a routerLink=\"/LaserCutMazes/help\" routerLinkActive=\"active\">Help</a>\n            <a routerLink=\"/LaserCutMazes/about\" routerLinkActive=\"active\">About</a>\n        </nav>\n    </header>\n</div>\n<div class=\"main-body\">\n    <router-outlet></router-outlet>\n</div>\n<div class=\"end-container\">\n    <footer>\n        <div class=\"copyright\">&copy; 2018 Aaron Rodriguez</div>\n        <nav>\n            <a routerLink=\"/LaserCutMazes/welcome\" routerLinkActive=\"active\">Home</a>\n            <a routerLink=\"/LaserCutMazes/designer\" routerLinkActive=\"active\">Maze Designer</a>\n            <a routerLink=\"/LaserCutMazes/help\" routerLinkActive=\"active\">Help</a>\n            <a routerLink=\"/LaserCutMazes/about\" routerLinkActive=\"active\">About</a>\n        </nav>\n    </footer>\n</div>\n"
 
 /***/ }),
 
@@ -446,7 +495,8 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_app_help_help_component__ = __webpack_require__("./src/app/help/help.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_app_help_modal_help_modal_component__ = __webpack_require__("./src/app/help-modal/help-modal.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_app_welcome_welcome_component__ = __webpack_require__("./src/app/welcome/welcome.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__lightbox_thumbnail_lightbox_thumbnail_component__ = __webpack_require__("./src/app/lightbox-thumbnail/lightbox-thumbnail.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_app_lightbox_thumbnail_lightbox_thumbnail_component__ = __webpack_require__("./src/app/lightbox-thumbnail/lightbox-thumbnail.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_app_about_about_component__ = __webpack_require__("./src/app/about/about.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -463,15 +513,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 var appRoutes = [{
         path: "LaserCutMazes/welcome",
         component: __WEBPACK_IMPORTED_MODULE_8_app_welcome_welcome_component__["a" /* WelcomeComponent */]
     }, {
-        path: "LaserCutMazes/builder",
+        path: "LaserCutMazes/designer",
         component: __WEBPACK_IMPORTED_MODULE_4_app_maze_builder_maze_builder_component__["a" /* MazeBuilderComponent */]
     }, {
         path: "LaserCutMazes/help",
         component: __WEBPACK_IMPORTED_MODULE_6_app_help_help_component__["a" /* HelpComponent */]
+    }, {
+        path: "LaserCutMazes/about",
+        component: __WEBPACK_IMPORTED_MODULE_10_app_about_about_component__["a" /* AboutComponent */]
     }, {
         path: "LaserCutMazes",
         redirectTo: "LaserCutMazes/welcome",
@@ -483,10 +537,11 @@ var AppModule = /** @class */ (function () {
     AppModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["I" /* NgModule */])({
             declarations: [
+                __WEBPACK_IMPORTED_MODULE_10_app_about_about_component__["a" /* AboutComponent */],
                 __WEBPACK_IMPORTED_MODULE_5_app_app_component__["a" /* AppComponent */],
                 __WEBPACK_IMPORTED_MODULE_6_app_help_help_component__["a" /* HelpComponent */],
                 __WEBPACK_IMPORTED_MODULE_7_app_help_modal_help_modal_component__["a" /* HelpModalComponent */],
-                __WEBPACK_IMPORTED_MODULE_9__lightbox_thumbnail_lightbox_thumbnail_component__["a" /* LightboxThumbnailComponent */],
+                __WEBPACK_IMPORTED_MODULE_9_app_lightbox_thumbnail_lightbox_thumbnail_component__["a" /* LightboxThumbnailComponent */],
                 __WEBPACK_IMPORTED_MODULE_4_app_maze_builder_maze_builder_component__["a" /* MazeBuilderComponent */],
                 __WEBPACK_IMPORTED_MODULE_8_app_welcome_welcome_component__["a" /* WelcomeComponent */]
             ],
@@ -1906,7 +1961,7 @@ var MazePrinter = /** @class */ (function () {
         return result;
     };
     MazePrinter.prototype.createConfigComment = function (configs) {
-        var comment = "<!--\n\tGenerated by Laser-Cut Maze Builder http://adashrod.github.io/\n";
+        var comment = "<!--\n\tGenerated by Laser-Cut Mazes http://adashrod.github.io/LaserCutMazes on " + new Date().toISOString() + "\n";
         for (var _i = 0, configs_1 = configs; _i < configs_1.length; _i++) {
             var config = configs_1[_i];
             comment += "\t" + config[0] + ": " + config[1] + "\n";
@@ -2960,7 +3015,7 @@ module.exports = ""
 /***/ "./src/app/welcome/welcome.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div>\n    <p>Welcome to the Laser-Cut Maze Builder, by Aaron Rodriguez</p>\n    <p>With this tool and a laser cutter such as a <a href=\"http://glowforge.com\" target=\"_blank\">Glowforge</a> or an\n        <a href=\"http://epiloglaser.com\" target=\"_blank\">Epilog</a>, you can create your own wooden toy maze. You can then assemble\n        it and play with it by rolling around a small marble through the hallways.\n    </p>\n</div>\n<div>todo: put video here</div>\n<div>\n    <p>Get started <a routerLink=\"/LaserCutMazes/builder\">here</a></p>\n</div>\n"
+module.exports = "<div>\n    <p>Welcome to the Laser-Cut Maze Designer, by Aaron Rodriguez</p>\n    <p>With this tool and a laser cutter such as a <a href=\"http://glowforge.com\" target=\"_blank\">Glowforge</a> or an\n        <a href=\"http://epiloglaser.com\" target=\"_blank\">Epilog</a>, you can create your own wooden toy maze. You can then assemble\n        it and play with it by rolling around a small marble through the hallways.\n    </p>\n</div>\n<div>todo: put video here</div>\n<div>\n    <p>Get started <a routerLink=\"/LaserCutMazes/designer\">here</a></p>\n</div>\n"
 
 /***/ }),
 
