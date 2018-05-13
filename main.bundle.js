@@ -27,7 +27,7 @@ module.exports = ""
 /***/ "./src/app/about/about.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n    The Laser-Cut Maze Designer was created by Aaron Rodriguez.\n</p>\n<p>\n    The source code can be found on <a href=\"https://github.com/adashrod/LaserCutMazesAngular\" target=\"_blank\">GitHub</a>. If you find a bug and would like to\n    submit a report, you can do so <a href=\"https://github.com/adashrod/LaserCutMazesAngular/issues\" target=\"_blank\">here</a>.\n</p>\n<p>\n    Aaron's other projects can also be found on <a href=\"https://github.com/adashrod\" target=\"_blank\">GitHub</a>.\n</p>\n"
+module.exports = "<p>\n    The Laser-Cut Maze Designer was created by Aaron Rodriguez.\n</p>\n<p>\n    The source code can be found on <a href=\"https://github.com/adashrod/LaserCutMazesAngular\" target=\"_blank\" appTrackClick category=\"About\" label=\"githubProject\">GitHub</a>. If you find a bug and would like to\n    submit a report, you can do so <a href=\"https://github.com/adashrod/LaserCutMazesAngular/issues\" target=\"_blank\" appTrackClick category=\"About\" label=\"githubProjectIssues\">here</a>.\n</p>\n<p>\n    Aaron's other projects can also be found on <a href=\"https://github.com/adashrod\" target=\"_blank\" appTrackClick category=\"About\" label=\"githubHome\">GitHub</a>.\n</p>\n"
 
 /***/ }),
 
@@ -497,12 +497,14 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_app_welcome_welcome_component__ = __webpack_require__("./src/app/welcome/welcome.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_app_lightbox_thumbnail_lightbox_thumbnail_component__ = __webpack_require__("./src/app/lightbox-thumbnail/lightbox-thumbnail.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_app_about_about_component__ = __webpack_require__("./src/app/about/about.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_app_track_click_directive__ = __webpack_require__("./src/app/track-click.directive.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -543,7 +545,8 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_7_app_help_modal_help_modal_component__["a" /* HelpModalComponent */],
                 __WEBPACK_IMPORTED_MODULE_9_app_lightbox_thumbnail_lightbox_thumbnail_component__["a" /* LightboxThumbnailComponent */],
                 __WEBPACK_IMPORTED_MODULE_4_app_maze_builder_maze_builder_component__["a" /* MazeBuilderComponent */],
-                __WEBPACK_IMPORTED_MODULE_8_app_welcome_welcome_component__["a" /* WelcomeComponent */]
+                __WEBPACK_IMPORTED_MODULE_8_app_welcome_welcome_component__["a" /* WelcomeComponent */],
+                __WEBPACK_IMPORTED_MODULE_11_app_track_click_directive__["a" /* TrackClickDirective */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["a" /* BrowserModule */],
@@ -1643,7 +1646,7 @@ var MazeBuilderComponent = /** @class */ (function () {
             if (show) {
                 window.ga("send", {
                     hitType: "event",
-                    eventCategory: "Builder",
+                    eventCategory: "Designer",
                     eventAction: "showSvg"
                 });
             }
@@ -1704,7 +1707,7 @@ var MazeBuilderComponent = /** @class */ (function () {
         if (this.trackEvents) {
             window.ga("send", {
                 hitType: "event",
-                eventCategory: "Builder",
+                eventCategory: "Designer",
                 eventAction: "build",
                 eventLabel: this.currentAlgorithm.name
             });
@@ -1788,7 +1791,7 @@ var MazeBuilderComponent = /** @class */ (function () {
         if (!this.autoGenerateSvg && this.trackEvents) {
             window.ga("send", {
                 hitType: "event",
-                eventCategory: "Builder",
+                eventCategory: "Designer",
                 eventAction: "export",
                 eventLabel: this.currentAlgorithm.name
             });
@@ -1799,7 +1802,7 @@ var MazeBuilderComponent = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_3_file_saver__["saveAs"])(blob, "maze.svg");
         window.ga("send", {
             hitType: "event",
-            eventCategory: "Builder",
+            eventCategory: "Designer",
             eventAction: "download",
             eventLabel: this.currentAlgorithm.name
         });
@@ -3001,6 +3004,60 @@ var SvgElementGenerator = /** @class */ (function () {
     return SvgElementGenerator;
 }());
 /* harmony default export */ __webpack_exports__["a"] = (SvgElementGenerator);
+
+
+/***/ }),
+
+/***/ "./src/app/track-click.directive.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TrackClickDirective; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var TrackClickDirective = /** @class */ (function () {
+    function TrackClickDirective() {
+    }
+    TrackClickDirective.prototype.onClick = function () {
+        window.ga("send", {
+            hitType: "event",
+            eventCategory: this.category,
+            eventAction: "externalLink",
+            eventLabel: this.label
+        });
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */])(),
+        __metadata("design:type", String)
+    ], TrackClickDirective.prototype, "category", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */])(),
+        __metadata("design:type", String)
+    ], TrackClickDirective.prototype, "label", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["y" /* HostListener */])("click"),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], TrackClickDirective.prototype, "onClick", null);
+    TrackClickDirective = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["s" /* Directive */])({
+            selector: "[appTrackClick]"
+        }),
+        __metadata("design:paramtypes", [])
+    ], TrackClickDirective);
+    return TrackClickDirective;
+}());
+
 
 
 /***/ }),
