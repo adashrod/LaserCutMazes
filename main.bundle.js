@@ -3072,7 +3072,7 @@ module.exports = ""
 /***/ "./src/app/welcome/welcome.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div>\n    <p>Welcome to the Laser-Cut Maze Designer, by Aaron Rodriguez</p>\n    <p>With this tool and a laser cutter such as a <a href=\"http://glowforge.com\" target=\"_blank\">Glowforge</a> or an\n        <a href=\"http://epiloglaser.com\" target=\"_blank\">Epilog</a>, you can create your own wooden toy maze. You can then assemble\n        it and play with it by rolling around a small marble through the hallways.\n    </p>\n</div>\n<div>\n    <iframe width=\"480\" height=\"270\" src=\"https://www.youtube.com/embed/4fWBe2R-6Nw\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen=\"allowfullscreen\"></iframe>\n</div>\n<div>\n    <p>Get started <a routerLink=\"/LaserCutMazes/designer\">here</a></p>\n</div>\n"
+module.exports = "<div>\n    <p>Welcome to the Laser-Cut Maze Designer, by Aaron Rodriguez</p>\n    <p>With this tool and a laser cutter such as a <a href=\"https://glowforge.us/IAVRVMWC\" target=\"_blank\">Glowforge</a> or an\n        <a href=\"http://epiloglaser.com\" target=\"_blank\">Epilog</a>, you can create your own wooden toy maze. You can then assemble\n        it and play with it by rolling around a small marble through the hallways.\n    </p>\n</div>\n<div>\n    <iframe width=\"480\" height=\"270\" src=\"https://www.youtube.com/embed/4fWBe2R-6Nw\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen=\"allowfullscreen\"></iframe>\n</div>\n<div>\n    <p>Get started <a routerLink=\"/LaserCutMazes/designer\">here</a></p>\n</div>\n"
 
 /***/ }),
 
