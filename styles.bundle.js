@@ -3,7 +3,7 @@ webpackJsonp(["styles"],{
 /***/ "./node_modules/raw-loader/index.js!./node_modules/postcss-loader/lib/index.js??embedded!./src/styles.css":
 /***/ (function(module, exports) {
 
-module.exports = "body {\n    margin: 0;\n    color: #f3e0dc;\n    font-family: sans-serif;\n    background: #deb887 url(\"https://adashrod.github.io/LaserCutMazes/assets/bg1.png\") repeat-x 0 0;\n}\n\n/* clear fix */\n\n.group > * { float: left; }\n\n.group:after {\n    content: \"\";\n    display: table;\n    clear: both;\n}\n\na {\n    text-decoration: none;\n    color: #d4a59a;\n}\n\na:hover {\n    text-decoration: underline;\n}\n\na:visited {\n    color: #5c2018;\n}\n"
+module.exports = "body {\n    margin: 0;\n    color: #f3e0dc;\n    font-family: sans-serif;\n    background: #deb887 url(\"https://adashrod.github.io/LaserCutMazes/assets/bg1.png\") repeat-x 0 0;\n}\n\n/* clear fix */\n\n.group > * { float: left; }\n\n.group:after {\n    content: \"\";\n    display: table;\n    clear: both;\n}\n\na {\n    text-decoration: none;\n    color: #d4a59a;\n}\n\na:hover {\n    text-decoration: underline;\n}\n\na:visited {\n    color: #5c2018;\n}\n\n.disabled {\n    text-decoration: line-through;\n}\n\n.image-caption {\n    text-align: center;\n    font-size: 10px;\n    font-style: italic;\n}\n"
 
 /***/ }),
 

@@ -86,6 +86,10 @@ var __extends = (this && this.__extends) || (function () {
 
 
 
+/**
+ * An implementation of https://en.wikipedia.org/wiki/Depth-first_search
+ * @author adashrod@gmail.com
+ */
 var DepthFirstSearchAlgorithm = /** @class */ (function (_super) {
     __extends(DepthFirstSearchAlgorithm, _super);
     function DepthFirstSearchAlgorithm() {
@@ -609,6 +613,9 @@ var Unit = /** @class */ (function () {
         this.pluralName = singularName + pluralSuffix;
         this.perInch = perInch;
     }
+    Unit.values = function () {
+        return [Unit.INCHES, Unit.CENTIMETERS, Unit.MILLIMETERS];
+    };
     Unit.INCHES = new Unit("inch", "es", new __WEBPACK_IMPORTED_MODULE_0_big_js___default.a(1));
     Unit.CENTIMETERS = new Unit("centimeter", "s", new __WEBPACK_IMPORTED_MODULE_0_big_js___default.a("2.54"));
     Unit.MILLIMETERS = new Unit("millimeter", "s", new __WEBPACK_IMPORTED_MODULE_0_big_js___default.a("25.4"));
@@ -693,6 +700,10 @@ var Direction = /** @class */ (function () {
 
 
 
+/**
+ * An instance of LinearWallModelGenerator can be used to create a {@link LinearWallModel} from a {@link Maze}
+ * @author adashrod@gmail.com
+ */
 var LinearWallModelGenerator = /** @class */ (function () {
     function LinearWallModelGenerator(maze) {
         this.maze = maze;
@@ -906,6 +917,12 @@ var RectangularWallModelGenerator = /** @class */ (function () {
             this.createWallSpacesFromLinearWalls(rectangularWallModel, verticalWalls, true, true);
             this.createWallSpacesFromLinearWalls(rectangularWallModel, horizontalWalls, false, false);
         }
+        for (var r = 0; r < this.isWall.length; r++) {
+            var row = this.isWall[r];
+            for (var c = 0; c < row.length; c++) {
+                rectangularWallModel.isWall[r][c] = this.isWall[r][c];
+            }
+        }
         return rectangularWallModel;
     };
     RectangularWallModelGenerator.prototype.createWallSpacesFromLinearWalls = function (rectangularWallModel, walls, wallsAreVertical, isFirstSetOfWalls) {
@@ -990,6 +1007,11 @@ var NotchConnection = /** @class */ (function () {
     }
     return NotchConnection;
 }());
+/**
+ * An instance of SheetWallModelGenerator can be used to create {@link SheetWallModel}s from
+ * {@link RectangularWallModel}s.
+ * @author adashrod@gmail.com
+ */
 var SheetWallModelGenerator = /** @class */ (function () {
     // cache and keys are recalculated on every get; call toString() on them for cache hits
     function SheetWallModelGenerator(model) {
@@ -1335,6 +1357,96 @@ var SheetWallTilingOptimizer = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/factories/single-sheet-model-generator.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__ = __webpack_require__("./src/app/common/ordered-pair.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__ = __webpack_require__("./src/app/misc/big-util.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_models_path__ = __webpack_require__("./src/app/models/path.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_app_models_single_sheet_model__ = __webpack_require__("./src/app/models/single-sheet-model.ts");
+
+
+
+
+var SingleSheetModelGenerator = /** @class */ (function () {
+    function SingleSheetModelGenerator(model) {
+        this.model = model;
+    }
+    SingleSheetModelGenerator.prototype.generate = function () {
+        var singleSheetModel = new __WEBPACK_IMPORTED_MODULE_3_app_models_single_sheet_model__["a" /* default */]();
+        for (var r = 0; r < this.model.isWall.length; r++) {
+            var row = this.model.isWall[r];
+            var startC = null;
+            for (var c = 0; c < row.length; c++) {
+                var cellIsWall = row[c];
+                if (startC === null) {
+                    if (!cellIsWall) {
+                        startC = c;
+                    }
+                }
+                else {
+                    var exclusiveRangeEnd = void 0;
+                    if (cellIsWall) {
+                        exclusiveRangeEnd = c;
+                    }
+                    else if (c + 1 === row.length) {
+                        exclusiveRangeEnd = row.length;
+                    }
+                    else {
+                        continue;
+                    }
+                    var rangeEvensAndOdds = this.countEvensAndOdds(startC, exclusiveRangeEnd), startXEvensAndOdds = this.countEvensAndOdds(0, startC), startYEvensAndOdds = this.countEvensAndOdds(0, r);
+                    var wallSpan = rangeEvensAndOdds.evens, hallwaySpan = rangeEvensAndOdds.odds, wallSpanToStartX = startXEvensAndOdds.evens, hallwaySpanToStartX = startXEvensAndOdds.odds, wallSpanToStartY = startYEvensAndOdds.evens, hallwaySpanToStartY = startYEvensAndOdds.odds;
+                    var startX = this.wallWidth.mul(wallSpanToStartX).plus(this.hallWidth.mul(hallwaySpanToStartX)), startY = this.wallWidth.mul(wallSpanToStartY).plus(this.hallWidth.mul(hallwaySpanToStartY));
+                    var pixelWidth = this.hallWidth.mul(hallwaySpan).add(this.wallWidth.mul(wallSpan));
+                    var endX = startX.add(pixelWidth), endY = startY.add(r % 2 === 0 ? this.wallWidth : this.hallWidth);
+                    var hole = new __WEBPACK_IMPORTED_MODULE_2_app_models_path__["a" /* default */]()
+                        .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](startX, startY))
+                        .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](endX, startY))
+                        .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](endX, endY))
+                        .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](startX, endY));
+                    singleSheetModel.addHole(hole);
+                    startC = null;
+                }
+            }
+        }
+        var floorWidth = this.wallWidth.mul((this.model.width + 1) / 2).add(this.hallWidth.mul((this.model.width - 1) / 2)), floorHeight = this.wallWidth.mul((this.model.height + 1) / 2).add(this.hallWidth.mul((this.model.height - 1) / 2));
+        var outlinePath = new __WEBPACK_IMPORTED_MODULE_2_app_models_path__["a" /* default */]()
+            .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](__WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */], __WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */]))
+            .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](floorWidth, __WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */]))
+            .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](floorWidth, floorHeight))
+            .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](__WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */], floorHeight));
+        var extraOutline = __WEBPACK_IMPORTED_MODULE_2_app_models_path__["a" /* default */].copy(outlinePath);
+        extraOutline.translate(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](outlinePath.width.add(this.separationSpace), __WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */]));
+        singleSheetModel.floorOutline.addPath(outlinePath).addPath(extraOutline);
+        if (singleSheetModel.maxHorizontalDisplacement.gt(this.maxWidth) || singleSheetModel.maxVerticalDisplacement.gt(this.maxHeight)) {
+            singleSheetModel.outOfBounds = true;
+        }
+        return singleSheetModel;
+    };
+    /**
+     * Counts the number of even and odds numbers in the specified range
+     * @param start start of range, inclusive
+     * @param end   end of range, exclusive
+     * @return an object with two properties: evens and odds
+     */
+    SingleSheetModelGenerator.prototype.countEvensAndOdds = function (start, endExclusive) {
+        var result = { evens: 0, odds: 0 };
+        if (endExclusive > start) {
+            var count = endExclusive - start;
+            result.odds = Math.floor((count + start % 2) / 2);
+            result.evens = count - result.odds;
+        }
+        return result;
+    };
+    return SingleSheetModelGenerator;
+}());
+/* harmony default export */ __webpack_exports__["a"] = (SingleSheetModelGenerator);
+
+
+/***/ }),
+
 /***/ "./src/app/help-modal/help-modal.component.css":
 /***/ (function(module, exports) {
 
@@ -1420,7 +1532,7 @@ module.exports = ".cut-intro, .numbering-text {\n    max-width: 550px;\n    marg
 /***/ "./src/app/help/help.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>You can click on any of the thumbnails in this page to see full-size versions.</p>\n<div class=\"help-section\">\n    <h1>Printing</h1>\n    <div class=\"group\">\n        <app-lightbox-thumbnail title=\"Example SVG\" image=\"LaserCutMazes/assets/blueprint.png\" thumbnailHeight=\"100\"></app-lightbox-thumbnail>\n        <div class=\"cut-intro\">\n            The different parts of the maze are grouped together and given different colors to facilitate printing (see example on left).\n            The order that the groups are printed matters and an ideal order is:\n        </div>\n    </div>\n    <ol>\n        <li>score/engrave wall numbers and floor numbers (blue)</li>\n        <li>cut walls and cut notches (black)</li>\n        <li>cut floor outline (red)</li>\n        <li>DO NOT cut, score, or engrave the calibration rectangle (green)</li>\n        <li>DO NOT cut, score, or engrave the bounding box rectangle (purple)</li>\n    </ol>\n    <ul>\n        <li>\n            The numbers can be scored, or left out entirely. They're only there as a guide for assembly, though assembling a large maze without them could be\n            tedious.\n        </li>\n        <li>\n            The floor outline should be cut last. Since this is the cut that cuts the floor out of the material, cutting this before the notches could lead to\n            the notch cuts being misaligned.\n        </li>\n        <li>\n            The calibration rectangle serves as a guide for setting up the print job in your printer software and should not be cut, engraved, or scored at\n            all. See the next section for more details.\n        </li>\n    </ul>\n</div>\n<div class=\"help-section\">\n    <h1>Assembly</h1>\n    <div class=\"group\">\n        <app-lightbox-thumbnail title=\"Floor Notches\" image=\"LaserCutMazes/assets/notches.png\" thumbnailHeight=\"80\"></app-lightbox-thumbnail>\n        <div class=\"numbering-text\">\n            The floor piece has rectangular notches cut into it (left); the walls have stubs that fit into these notches (right).\n            Each pair of notches has a number printed between them, and a wall piece that fits into those notches has the same number printed on it.\n        </div>\n        <app-lightbox-thumbnail class=\"right\" title=\"Numbered Wall Pieces\" image=\"LaserCutMazes/assets/wallPieces.png\" thumbnailHeight=\"80\"></app-lightbox-thumbnail>\n    </div>\n    <p>\n        If the pieces fit somewhat snugly, you might only need to glue the walls along the outer edge to the floor. If they fit very tightly, you might not need\n        to glue them at all.\n    </p>\n</div>\n<div class=\"help-section\">\n    <h1>Out of Bounds</h1>\n    <p>\n        If the maze is too big, the pieces won't fit in a single printing area, and you'll get the out-of-bounds warning when the SVG is generated.\n        The tool currently doesn't break up the blueprint into multiple SVGs in this case. One solution would be to change any of the maze dimensions to use\n        less printing material; if that isn't preferred, you'll need to manually edit the SVG in the SVG editor of your choice to split the print into two or\n        more print jobs.\n    </p>\n    <p>\n        When the out-of-bounds situation occurs, the printer's max width and max height values will be used to generate a rectangular bounding box in the SVG\n        as a guide. It is displayed as a purple rectangle and anything outside of it will be outside of the printing area.\n    </p>\n</div>\n<div class=\"help-section\">\n    <h1>Calibration Rectangle</h1>\n    <h3>A need for Calibration</h3>\n    <div>\n        <p>\n            If your laser cutter software doesn't respect the pixel density settings (dots/pixels per inch, DPI, etc) then your image won't be the proper size,\n            i.e. it will be scaled down or up. The problem with this is that scaling everything down makes the floor notches smaller, (and scaling up makes the\n            floor notches bigger), but the material thickness doesn't change, so printing a scaled image would result in wall pieces that wouldn't fit in the\n            notches. More specifically, the width of the notches has to be exactly the same size as the material thickness for the pieces to fit together, and\n            scaling breaks that. See the following image for an example of this auto-scaling.\n        </p>\n        <app-lightbox-thumbnail title=\"Scaled Down\" image=\"LaserCutMazes/assets/improperScale.png\" thumbnailWidth=\"600\"></app-lightbox-thumbnail>\n        <p>\n            The above example maze was created with an 8-inch wide calibration rectangle (highlighted in green), but the image has been scaled down to about\n            7.5 inches. In order to fix this, the entire image should be selected and scaled up (stretched) until the calibration rectangle is lined up with\n            the 8-inch mark on the ruler.\n        </p>\n        <app-lightbox-thumbnail title=\"Corrected Scale\" image=\"LaserCutMazes/assets/correctedScale.png\" thumbnailWidth=\"600\"></app-lightbox-thumbnail>\n        <p>\n            In the second image, the entire blueprint has been scaled back up to make the calibration rectangle the correct size (8 inches wide here),\n            ensuring that all pieces are the correct size.\n        </p>\n    </div>\n</div>\n"
+module.exports = "<p>You can click on any of the thumbnails in this page to see full-size versions.</p>\n<div class=\"help-section\">\n    <h1>Printing</h1>\n    <div class=\"group\">\n        <app-lightbox-thumbnail title=\"Example SVG\" image=\"LaserCutMazes/assets/blueprint.png\" thumbnailHeight=\"100\"></app-lightbox-thumbnail>\n        <div class=\"cut-intro\">\n            The different parts of the maze are grouped together and given different colors to facilitate printing (see example on left).\n            The order that the groups are printed matters and an ideal order is:\n        </div>\n    </div>\n    <ol>\n        <li>score/engrave wall numbers and floor numbers (blue, floor and wall mode only)</li>\n        <li>cut walls and cut notches in floor and wall mode (black)/cut single maze piece in single sheet mode (black)</li>\n        <li>cut outline(s) (red)</li>\n        <li>DO NOT cut, score, or engrave the calibration rectangle (green)</li>\n        <li>DO NOT cut, score, or engrave the bounding box rectangle (purple)</li>\n    </ol>\n    <ul>\n        <li>\n            The numbers can be scored, or left out entirely. They're only there as a guide for assembly, though assembling a large maze without them could be\n            tedious.\n        </li>\n        <li>\n            The outlines should be cut last. Since these cuts cut the piece(s) out of the material, cutting this before could lead to\n            anything inside being misaligned.\n        </li>\n        <li>\n            The calibration rectangle serves as a guide for setting up the print job in your printer software and should not be cut, engraved, or scored at\n            all. See the section below for more details.\n        </li>\n    </ul>\n</div>\n<div class=\"help-section\">\n    <h1>Assembly</h1>\n    <h3>floor and wall mode</h3>\n    <div class=\"group\">\n        <app-lightbox-thumbnail title=\"Floor Notches\" image=\"LaserCutMazes/assets/notches.png\" thumbnailHeight=\"80\"></app-lightbox-thumbnail>\n        <div class=\"numbering-text\">\n            The floor piece has rectangular notches cut into it (left); the walls have stubs that fit into these notches (right).\n            Each pair of notches has a number printed between them, and a wall piece that fits into those notches has the same number printed on it.\n        </div>\n        <app-lightbox-thumbnail class=\"right\" title=\"Numbered Wall Pieces\" image=\"LaserCutMazes/assets/wallPieces.png\" thumbnailHeight=\"80\"></app-lightbox-thumbnail>\n    </div>\n    <p>\n        If the pieces fit somewhat snugly, you might only need to glue the walls along the outer edge to the floor. If they fit very tightly, you might not need\n        to glue them at all.\n    </p>\n    <h3>single sheet mode</h3>\n    <p>In this mode all that is needed is to glue the maze piece onto the floor piece.</p>\n</div>\n<div class=\"help-section\">\n    <h1>Out of Bounds</h1>\n    <p>\n        If the maze is too big, the pieces won't fit in a single printing area, and you'll get the out-of-bounds warning when the SVG is generated.\n        The tool currently doesn't break up the blueprint into multiple SVGs in this case. One solution would be to change any of the maze dimensions to use\n        less printing material; if that isn't preferred, you'll need to manually edit the SVG in the SVG editor of your choice to split the print into two or\n        more print jobs.\n    </p>\n    <p>\n        When the out-of-bounds situation occurs, the printer's max width and max height values will be used to generate a rectangular bounding box in the SVG\n        as a guide. It is displayed as a purple rectangle and anything outside of it will be outside of the printing area.\n    </p>\n</div>\n<div class=\"help-section\">\n    <h1>Calibration Rectangle</h1>\n    <h3>A need for Calibration</h3>\n    <div>\n        <p>\n            If your laser cutter software doesn't respect the pixel density settings (dots/pixels per inch, DPI, etc) then your image won't be the proper size,\n            i.e. it will be scaled down or up. The problem with this is that scaling everything down makes the floor notches smaller, (and scaling up makes the\n            floor notches bigger), but the material thickness doesn't change, so printing a scaled image would result in wall pieces that wouldn't fit in the\n            notches. More specifically, the width of the notches has to be exactly the same size as the material thickness for the pieces to fit together, and\n            scaling breaks that. See the following image for an example of this auto-scaling.\n        </p>\n        <app-lightbox-thumbnail title=\"Scaled Down\" image=\"LaserCutMazes/assets/improperScale.png\" thumbnailWidth=\"600\"></app-lightbox-thumbnail>\n        <p>\n            The above example maze was created with an 8-inch wide calibration rectangle (highlighted in green), but the image has been scaled down to about\n            7.5 inches. In order to fix this, the entire image should be selected and scaled up (stretched) until the calibration rectangle is lined up with\n            the 8-inch mark on the ruler.\n        </p>\n        <app-lightbox-thumbnail title=\"Corrected Scale\" image=\"LaserCutMazes/assets/correctedScale.png\" thumbnailWidth=\"600\"></app-lightbox-thumbnail>\n        <p>\n            In the second image, the entire blueprint has been scaled back up to make the calibration rectangle the correct size (8 inches wide here),\n            ensuring that all pieces are the correct size.\n        </p>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -1558,7 +1670,7 @@ module.exports = ".conversions {\n    margin-bottom: 5px;\n}\n\n.section-title {
 /***/ "./src/app/maze-builder/maze-builder.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div>\n    <p>To get started, enter some values for the maze dimensions (rows and columns). Once you do that the algorithm will automatically generate a maze.\n        Choose your material measurements and you'll be ready to click \"Export SVG Blueprint\", which will let you download an SVG file to send to your\n        laser cutter.\n    </p>\n    <p>Each input has a [?] help button with more information on what that input means.</p>\n</div>\n<div class=\"conversions\">\n    <span>Some common measurements and conversions</span>\n    <app-help-modal>\n        <div class=\"title\">Common conversions</div>\n        <div class=\"body\">\n            <div class=\"conversion-table-title\">Material Thickness</div>\n            <table>\n                <thead>\n                    <tr>\n                        <th>Millimeters (mm)</th>\n                        <th>Centimeters (cm)</th>\n                        <th>Inches (in)</th>\n                    </tr>\n                </thead>\n                <tbody>\n                    <tr>\n                        <td>1</td>\n                        <td>.1</td>\n                        <td>.039</td>\n                    </tr>\n                    <tr>\n                        <td>2</td>\n                        <td>.2</td>\n                        <td>.079</td>\n                    </tr>\n                    <tr>\n                        <td>3</td>\n                        <td>.3</td>\n                        <td>.118</td>\n                    </tr>\n                    <tr>\n                        <td>4</td>\n                        <td>.4</td>\n                        <td>.158</td>\n                    </tr>\n                    <tr>\n                        <td>5</td>\n                        <td>.5</td>\n                        <td>.197</td>\n                    </tr>\n                    <tr>\n                        <td>3.18</td>\n                        <td>.318</td>\n                        <td>1/8</td>\n                    </tr>\n                    <tr>\n                        <td>6.35</td>\n                        <td>.635</td>\n                        <td>1/4</td>\n                    </tr>\n                </tbody>\n            </table>\n            <div class=\"conversion-table-title\">Print Area Dimensions</div>\n            <table>\n                <thead>\n                    <tr>\n                        <th>Millimeters (mm)</th>\n                        <th>Centimeters (cm)</th>\n                        <th>Inches (in)</th>\n                    </tr>\n                </thead>\n                <tbody>\n                    <tr>\n                        <td>279.4</td>\n                        <td>27.94</td>\n                        <td>11</td>\n                    </tr>\n                    <tr>\n                        <td>304.8</td>\n                        <td>30.48</td>\n                        <td>12</td>\n                    </tr>\n                    <tr>\n                        <td>495.3</td>\n                        <td>49.53</td>\n                        <td>19.5</td>\n                    </tr>\n                    <tr>\n                        <td>508</td>\n                        <td>50.8</td>\n                        <td>20</td>\n                    </tr>\n                </tbody>\n            </table>\n        </div>\n    </app-help-modal>\n</div>\n<form>\n    <div class=\"group\">\n        <div class=\"maze-inputs inputs\">\n            <div class=\"section-title\">\n                <span>Maze Configuration</span>\n                <app-help-modal>\n                    <div class=\"title\">Maze Configuration Parameters</div>\n                    <div class=\"body\">These parameters determine the shape, structure and dimensions of the maze. Enter values for rows and columns to get started.</div>\n                </app-help-modal>\n            </div>\n            <div class=\"row\">\n                <label for=\"numRowsInput\">number of rows</label>\n                <div>\n                    <input id=\"numRowsInput\" [type]=\"numericInputType\" min=\"1\" step=\"1\" [(ngModel)]=\"mazeConfig.numRows\" name=\"numRowsInput\"/>\n                    <app-help-modal>\n                        <div class=\"title\">number of maze rows</div>\n                        <div class=\"body\">Number of rows, aka height. This is the number of horizontal lanes in the maze (positive integers only).</div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"numColsInput\">number of columns</label>\n                <div>\n                    <input id=\"numColsInput\" [type]=\"numericInputType\" min=\"1\" step=\"1\" [(ngModel)]=\"mazeConfig.numCols\" name=\"numColsInput\"/>\n                    <app-help-modal>\n                        <div class=\"title\">number of maze columns</div>\n                        <div class=\"body\">Number of columns, aka width. This is the number of vertical lanes in the maze (positive integers only).</div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"mazeUnitInput\">units</label>\n                <div>\n                    <select id=\"mazeUnitInput\" [(ngModel)]=\"mazeConfig.unit\" (change)=\"buildMaze()\" name=\"mazeUnitInput\">\n                        <option *ngFor=\"let u of mazeUnits\" [ngValue]=\"u\">{{u.pluralName}}</option>\n                    </select>\n                    <app-help-modal>\n                        <div class=\"title\">Maze Measurement Units</div>\n                        <div class=\"body\">These are the units used for the measurements below.</div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"wallHeightInput\">wall height</label>\n                <div>\n                    <input id=\"wallHeightInput\" [type]=\"numericInputType\" min=\".01\" step=\".25\" [(ngModel)]=\"mazeConfig.wallHeight\" (change)=\"buildMaze()\" name=\"wallHeightInput\"/>\n                    <app-help-modal>\n                        <div class=\"title\">Wall Height</div>\n                        <div class=\"body\">\n                            The height of the walls from the floor of the maze. This should be tall enough so that a marble rolling through the maze won't bounce over the walls.\n                            <img src=\"LaserCutMazes/assets/wallHeight.png\"/>\n                        </div>\n                    </app-help-modal>\n\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"materialThicknessInput\">material thickness</label>\n                <div>\n                    <input id=\"materialThicknessInput\" [type]=\"numericInputType\" min=\".01\" step=\".01\" [(ngModel)]=\"mazeConfig.materialThickness\" (change)=\"buildMaze()\" name=\"materialThicknessInput\"/>\n                    <app-help-modal>\n                        <div class=\"title\">Material Thickness</div>\n                        <div class=\"body\">\n                            The thickness of the material being used to cut out the maze pieces. Note: this will also be the width of the walls once assembled.\n                            <img src=\"LaserCutMazes/assets/materialThickness.png\"/>\n                        </div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"hallWidthInput\">hall width</label>\n                <div>\n                    <input id=\"hallWidthInput\" [type]=\"numericInputType\" min=\".1\" step=\".1\" [(ngModel)]=\"mazeConfig.hallWidth\" (change)=\"buildMaze()\" name=\"hallWidthInput\"/>\n                    <app-help-modal>\n                        <div class=\"title\">Hall width</div>\n                        <div class=\"body\">\n                            Hall width, or space between walls. This should be at least as big as the diameter of a marble that would be rolling through the maze.\n                            <img src=\"LaserCutMazes/assets/hallWidth.png\"/>\n                        </div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"separationSpaceInput\">separation space</label>\n                <div>\n                    <input id=\"separationSpaceInput\" [type]=\"numericInputType\" min=\"0\" step=\".01\" [(ngModel)]=\"mazeConfig.separationSpace\" (change)=\"buildMaze()\" name=\"separationSpaceInput\"/>\n                    <app-help-modal>\n                        <div class=\"title\">Separation Space</div>\n                        <div class=\"body\">\n                            The minimum space between separate pieces on the blueprint for laser cutting. If set to 0, no material will be wasted between pieces, but if the kerf of the laser is high, the pieces might end up too narrow/short.\n                            <img src=\"LaserCutMazes/assets/separationSpace.png\"/>\n                        </div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"algorithmInput\">algorithm</label>\n                <div>\n                    <select id=\"algorithmInput\" [(ngModel)]=\"currentAlgorithm\" (change)=\"buildMaze()\" name=\"algorithmInput\">\n                        <option *ngFor=\"let a of algorithms\" [ngValue]=\"a\">{{a.name}}</option>\n                    </select>\n                    <app-help-modal>\n                        <div class=\"title\">Maze Generation Algorithm</div>\n                        <div class=\"body\">\n                            <span>This is the algorithm that is used to randomly generate the maze.</span>\n                            <dl>\n                                <dt>Prim's Algorithm</dt>\n                                <dd>Method: start with all spaces having all walls closed. Randomly pick a space and add it to the maze path. Add all of its neighboring spaces to a list. While there are spaces in the list, remove a random one, pick a random neighbor, connect the two (remove the wall), and add the removed space's unexplored neighbors to the list. Repeat until all spaces have been visited. <a href=\"https://en.wikipedia.org/wiki/Prim%27s_algorithm\" target=\"_blank\">Prim's Algorithm on Wikipedia</a></dd>\n                                <dt>Kruskal's Algorithm</dt>\n                                <dd>Method: start with all spaces having all walls closed. Go over every wall that separates two spaces (outer walls not included). Randomly pick a wall. If the two spaces separated by the wall are not already connected by a path, remove the wall between them. Repeat until all spaces are on the same path. <a href=\"https://en.wikipedia.org/wiki/Kruskal%27s_algorithm\" target=\"_blank\">Kruskal's Algorithm on Wikipedia</a></dd>\n                                <dt>Depth-First Search</dt>\n                                <dd>Method: start with all spaces having all walls closed. Randomly pick a space and add it to the maze path. Move in a random direction and add that to the path. Continue until a dead end is reached, then backtrack until reaching a space where a fork is possible and pick a new direction. Continue until all spaces have been visited. This method tends to make mazes with long paths, dead ends, and not a lot of forks. <a href=\"https://en.wikipedia.org/wiki/Depth-first_search\" target=\"_blank\">Depth-First Search Algorithm on Wikipedia</a></dd>\n                                <dt>Do-It-Yourself</dt>\n                                <dd>This \"algorithm\" does nothing. You start out with a maze with all walls closed and click on walls to toggle them on/off and design your own maze.</dd>\n                            </dl>\n                        </div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"randomSeedInput\">random seed</label>\n                <div>\n                    <input id=\"randomSeedInput\" type=\"text\" [(ngModel)]=\"randomSeed\" (change)=\"buildMaze()\" (keyup)=\"buildMaze()\" name=\"randomSeedInput\"/>\n                    <app-help-modal>\n                        <div class=\"title\">Random Seed</div>\n                        <div class=\"body\">\n                            <p>The random seed is where the random number generator \"starts\" generating random numbers. It can be any string of numbers/letters/etc. If you enter a random seed, then the randomly generated maze will always be the same randomly generated maze as long as you use that seed.</p>\n                            <p>For example: if you use Prim's algorithm, enter a seed of \"rand12\", and choose 4 rows and 4 columns, you should see a maze that has a path from the top-left corner, to the top-right corner, to the bottom-right corner. You should be able to generate that same maze using the same row, column, and seed parameters at any time, in any browser, even if you refresh the page.</p>\n                        </div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <span>last seed used:</span>\n                <span>{{lastSeedUsed}}</span>\n            </div>\n        </div>\n        <div class=\"printer-inputs inputs\">\n            <div class=\"section-title\">\n                <span>Printer Configuration</span>\n                <app-help-modal [popLeft]=\"true\">\n                    <div class=\"title\">Printer Configuration</div>\n                    <div class=\"body\">These are configurations specific to the model of the printer that are needed by this tool.</div>\n                </app-help-modal>\n            </div>\n            <div class=\"row\">\n                <label for=\"maxPrinterUnits\">units</label>\n                <div>\n                    <select id=\"maxPrinterUnits\" [(ngModel)]=\"maxPrinterUnits\" (change)=\"buildMaze()\" name=\"maxPrinterUnits\">\n                        <option *ngFor=\"let u of mazeUnits\" [ngValue]=\"u\">{{u.pluralName}}</option>\n                    </select>\n                    <app-help-modal [popLeft]=\"true\">\n                        <div class=\"title\">Printer Dimension Units</div>\n                        <div class=\"body\">These are the units used for the measurements below.</div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"printerPpu\">pixels per {{maxPrinterUnits.singularName}}</label>\n                <div>\n                    <input [type]=\"numericInputType\" min=\"1\" step=\"1\" [(ngModel)]=\"ppu\" (change)=\"buildMaze()\" name=\"printerPpu\"/>\n                    <app-help-modal [popLeft]=\"true\">\n                        <div class=\"title\">Pixels per Unit</div>\n                        <div class=\"body\">\n                            The number of pixels that the laser cutter interprets as being the length of the selected unit. E.g. Choosing inches and 96 would mean\n                            96 pixels per inch, aka 96 dots per inch (DPI).\n                        </div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"maxWidthInput\">max printer width</label>\n                <div>\n                    <input id=\"maxWidthInput\" [type]=\"numericInputType\" min=\"1\" [(ngModel)]=\"maxWidth\" (change)=\"buildMaze()\" name=\"maxWidthInput\"/>\n                    <app-help-modal [popLeft]=\"true\">\n                        <div class=\"title\">Max Printer Width</div>\n                        <div class=\"body\">The width of the laser cutter's printable area</div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"maxHeightInput\">max printer height</label>\n                <div>\n                    <input id=\"maxHeightInput\" [type]=\"numericInputType\" min=\"1\" [(ngModel)]=\"maxHeight\" (change)=\"buildMaze()\" name=\"maxHeightInput\"/>\n                    <app-help-modal [popLeft]=\"true\">\n                        <div class=\"title\">Max Printer Height</div>\n                        <div class=\"body\">The height of the laser cutter's printable area</div>\n                    </app-help-modal>\n                </div>\n            </div>\n        </div>\n        <div class=\"calibration-inputs inputs\">\n            <div class=\"section-title\">\n                <span>Calibration Rectangle Configuration</span>\n                <app-help-modal [popLeft]=\"true\">\n                    <div class=\"title\">Calibration Rectangle</div>\n                    <div class=\"body\">\n                        <p>All measurement inputs are used to calculate pixel-perfect-sized cutouts in the SVG, however some laser cutter software might scale images down or up. Since the pieces are interlocking, scaling the image will make them not fit together properly.</p>\n                        <p>If your laser cutter software scales the image, you can use the calibration rectangle as a guide to restore the correct scale. For Example: if your laser cutter has a ruler on the edge of the canvas with inch measurements, you can create a calibration rectangle 6 inches wide and scale the image back up/down until the rectangle is 6 inches according to that ruler, then the pieces should be cut at the correct size.</p>\n                        <p>IMPORTANT NOTE: Once you've used the rectangle to calibrate the scale, make sure not to cut or engrave it on the material.</p>\n                    </div>\n                </app-help-modal>\n            </div>\n            <div class=\"row\">\n                <label for=\"includeCalibrationRectangleInput\">include in SVG</label>\n                <div>\n                    <input id=\"includeCalibrationRectangleInput\" type=\"checkbox\" [(ngModel)]=\"includeCalibrationRectangle\" (change)=\"buildMaze()\" name=\"includeCalibrationRectangleInput\"/>\n                    <app-help-modal [popLeft]=\"true\">\n                        <div class=\"title\">Include Calibration Rectangle</div>\n                        <div class=\"body\">Check this box to include the calibration rectangle in the exported SVG.</div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"calibrationRectangleUnitInput\">units</label>\n                <div>\n                    <select id=\"calibrationRectangleUnitInput\" [(ngModel)]=\"calibrationRectangleConfig.unit\" (change)=\"buildMaze()\" name=\"calibrationRectangleUnitInput\">\n                        <option *ngFor=\"let u of rectangleUnits\" [ngValue]=\"u\">{{u.pluralName}}</option>\n                    </select>\n                    <app-help-modal [popLeft]=\"true\">\n                        <div class=\"title\">Calibration Rectangle Units</div>\n                        <div class=\"body\">These are the units used for the measurements below.</div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"calibrationRectangleWidthInput\">rectangle width</label>\n                <div>\n                    <input id=\"calibrationRectangleWidthInput\" [type]=\"numericInputType\" min=\"1\" step=\"1\" [(ngModel)]=\"calibrationRectangleConfig.width\" (change)=\"buildMaze()\" name=\"calibrationRectangleWidthInput\"/>\n                    <app-help-modal [popLeft]=\"true\">\n                        <div class=\"title\">Rectangle Width</div>\n                        <div class=\"body\">The width of the rectangle in the specified units (positive integers only).</div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"calibrationRectangleHeightInput\">rectangle height</label>\n                <div>\n                    <input id=\"calibrationRectangleHeightInput\" [type]=\"numericInputType\" min=\"1\" step=\"1\" [(ngModel)]=\"calibrationRectangleConfig.height\" (change)=\"buildMaze()\" name=\"calibrationRectangleHeightInput\"/>\n                    <app-help-modal [popLeft]=\"true\">\n                        <div class=\"title\">Rectangle Height</div>\n                        <div class=\"body\">The height of the rectangle in the specified units (positive integers only).</div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <span>horizontal alignment</span>\n                <div>\n                    <label for=\"calibrationRectangleLeftInput\">left</label>\n                    <input id=\"calibrationRectangleLeftInput\" type=\"radio\" [value]=\"true\" [(ngModel)]=\"calibrationRectangleConfig.leftAligned\" (change)=\"buildMaze()\" name=\"horizontalRadio\"/>\n                    <label for=\"calibrationRectangleRightInput\">right</label>\n                    <input id=\"calibrationRectangleRightInput\" type=\"radio\" [value]=\"false\" [(ngModel)]=\"calibrationRectangleConfig.leftAligned\" (change)=\"buildMaze()\" name=\"horizontalRadio\"/>\n                    <app-help-modal [popLeft]=\"true\">\n                        <div class=\"title\">Rectangle Horizontal Alignment</div>\n                        <div class=\"body\">The rectangle can be aligned to the left or right side of the printing area.</div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <span>vertical alignment</span>\n                <div>\n                    <label for=\"calibrationRectangleTopInput\">top</label>\n                    <input id=\"calibrationRectangleTopInput\" type=\"radio\" [value]=\"true\" [(ngModel)]=\"calibrationRectangleConfig.topAligned\" (change)=\"buildMaze()\" name=\"verticalRadio\"/>\n                    <label for=\"calibrationRectangleBottomInput\">bottom</label>\n                    <input id=\"calibrationRectangleBottomInput\" type=\"radio\" [value]=\"false\" [(ngModel)]=\"calibrationRectangleConfig.topAligned\" (change)=\"buildMaze()\" name=\"verticalRadio\"/>\n                    <app-help-modal [popLeft]=\"true\">\n                        <div class=\"title\">Rectangle Vertical Alignment</div>\n                        <div class=\"body\">The rectangle can be aligned to the top or bottom of the printing area.</div>\n                    </app-help-modal>\n                </div>\n            </div>\n        </div>\n    </div>\n    <input type=\"button\" (click)=\"buildMaze()\" value=\"Regenerate\" [disabled]=\"!mazeConfig.numRows || !mazeConfig.numCols\"/>\n    <app-help-modal>\n        <div class=\"title\">Generate a New Random Maze</div>\n        <div class=\"body\">The maze is automatically rebuilt when you change any of the inputs. You can use this to manually generate a different random maze, but only if you don't set a random seed.</div>\n    </app-help-modal>\n    <div *ngIf=\"maze\" class=\"group\">\n        <table class=\"maze\">\n            <tr *ngFor=\"let row of maze.grid; let r = index\">\n                <td *ngFor=\"let elem of row; let c = index\" [ngClass]=\"{'northWall': !elem.northOpen, 'eastWall': !elem.eastOpen, 'southWall': !elem.southOpen, 'westWall': !elem.westOpen}\" (click)=\"onClickMazeCell($event, r, c)\"></td>\n            </tr>\n        </table>\n        <div class=\"try-clicking\">&lt;- Try clicking on the walls of the maze to toggle them</div>\n    </div>\n    <input type=\"button\" (click)=\"exportSvg()\" value=\"Export SVG Blueprint\" [disabled]=\"!maze\"/>\n    <app-help-modal>\n        <div class=\"title\">Export Maze Design to an SVG Blueprint</div>\n        <div class=\"body\">Once you've created a maze that you like with the above settings, click here to create the SVG file for download.</div>\n    </app-help-modal>\n    <label for=\"auto-svg\">Automatic SVG generation is {{autoGenerateSvg ? \"on\" : \"off\"}}</label><input id=\"auto-svg\" type=\"checkbox\" [(ngModel)]=\"autoGenerateSvg\" name=\"autoSvgCheckbox\"/>\n</form>\n<input type=\"button\" (click)=\"downloadSvg()\" value=\"Download\" [disabled]=\"!rawSvgSrc\"/>\n<label for=\"svg-preview\">SVG preview is {{showSvgPreview ? \"on\" : \"off\"}}</label><input id=\"svg-preview\" type=\"checkbox\" [(ngModel)]=\"showSvgPreview\" name=\"svgPreviewCheckbox\"/>\n<app-help-modal>\n    <div class=\"title\">Toggle SVG Preview</div>\n    <div class=\"body\">Click here to toggle the SVG preview. If an SVG has been generated, this will show the blueprint here in the page.</div>\n</app-help-modal>\n<span *ngIf=\"outOfBounds\">\n    <span class=\"out-of-bounds\">Warning: SVG is out of bounds of print area</span>\n    <app-help-modal [popLeft]=\"true\">\n        <div class=\"title\">Out of Bounds</div>\n        <div class=\"body\">\n            The maze is big enough that the pieces don't fit within the printing area.\n            See the help page for more info on what to do in this situation.\n        </div>\n    </app-help-modal>\n</span>\n<div class=\"svg-preview\" *ngIf=\"showSvgPreview\" [innerHTML]=\"safeSvgSrc || ''\"></div>\n"
+module.exports = "<div>\n    <p>To get started, enter some values for the maze dimensions (rows and columns). Once you do that the algorithm will automatically generate a maze.\n        Choose your material measurements and you'll be ready to click \"Export SVG Blueprint\", which will let you download an SVG file to send to your\n        laser cutter.\n    </p>\n    <p>Each input has a [?] help button with more information on what that input means.</p>\n</div>\n<div class=\"conversions\">\n    <span>Some common measurements and conversions</span>\n    <app-help-modal>\n        <div class=\"title\">Common conversions</div>\n        <div class=\"body\">\n            <div class=\"conversion-table-title\">Material Thickness</div>\n            <table>\n                <thead>\n                    <tr>\n                        <th>Millimeters (mm)</th>\n                        <th>Centimeters (cm)</th>\n                        <th>Inches (in)</th>\n                    </tr>\n                </thead>\n                <tbody>\n                    <tr>\n                        <td>1</td>\n                        <td>.1</td>\n                        <td>.039</td>\n                    </tr>\n                    <tr>\n                        <td>2</td>\n                        <td>.2</td>\n                        <td>.079</td>\n                    </tr>\n                    <tr>\n                        <td>3</td>\n                        <td>.3</td>\n                        <td>.118</td>\n                    </tr>\n                    <tr>\n                        <td>4</td>\n                        <td>.4</td>\n                        <td>.158</td>\n                    </tr>\n                    <tr>\n                        <td>5</td>\n                        <td>.5</td>\n                        <td>.197</td>\n                    </tr>\n                    <tr>\n                        <td>3.18</td>\n                        <td>.318</td>\n                        <td>1/8</td>\n                    </tr>\n                    <tr>\n                        <td>6.35</td>\n                        <td>.635</td>\n                        <td>1/4</td>\n                    </tr>\n                </tbody>\n            </table>\n            <div class=\"conversion-table-title\">Print Area Dimensions</div>\n            <table>\n                <thead>\n                    <tr>\n                        <th>Millimeters (mm)</th>\n                        <th>Centimeters (cm)</th>\n                        <th>Inches (in)</th>\n                    </tr>\n                </thead>\n                <tbody>\n                    <tr>\n                        <td>279.4</td>\n                        <td>27.94</td>\n                        <td>11</td>\n                    </tr>\n                    <tr>\n                        <td>304.8</td>\n                        <td>30.48</td>\n                        <td>12</td>\n                    </tr>\n                    <tr>\n                        <td>495.3</td>\n                        <td>49.53</td>\n                        <td>19.5</td>\n                    </tr>\n                    <tr>\n                        <td>508</td>\n                        <td>50.8</td>\n                        <td>20</td>\n                    </tr>\n                </tbody>\n            </table>\n        </div>\n    </app-help-modal>\n</div>\n<form>\n    <div class=\"group\">\n        <div class=\"maze-inputs inputs\">\n            <div class=\"section-title\">\n                <span>Maze Configuration</span>\n                <app-help-modal>\n                    <div class=\"title\">Maze Configuration Parameters</div>\n                    <div class=\"body\">These parameters determine the shape, structure and dimensions of the maze. Enter values for rows and columns to get started.</div>\n                </app-help-modal>\n            </div>\n            <div class=\"row\">\n                <label for=\"svgTypeInput\">print mode</label>\n                <div>\n                    <select id=\"printModeInput\" [(ngModel)]=\"printMode\" (change)=\"buildMaze()\" name=\"printMode\">\n                        <option *ngFor=\"let e of printModes\" [ngValue]=\"e\">{{e.name}}</option>\n                    </select>\n                    <app-help-modal>\n                        <div class=\"title\">Maze Print Mode</div>\n                        <div class=\"body\">\n                            <dl>\n                                <dt>Floor and Wall</dt>\n                                <dd>\n                                    One piece is cut out for the floor of the maze, individual pieces are cut out for each wall, and wall pieces must be \n                                    fastened into notches in the floor.\n                                    <br/>\n                                    <img src=\"LaserCutMazes/assets/floorAndWallPartiallyAssembled.png\"/>\n                                    <div class=\"image-caption\">floor with some wall pieces in place</div>\n                                    <img src=\"LaserCutMazes/assets/wallPiecesSmall.png\"/>\n                                    <div class=\"image-caption\">wall pieces</div>\n                                </dd>\n                                <dt>Single Sheet</dt>\n                                <dd>\n                                    Two pieces are cut out: one that is the entire shape of the maze, and one that is a plain rectangle the same size as the \n                                    first piece. The maze piece goes on top of the plain rectangle and no other assembly is required. Additional copies of the\n                                    pieces can be printed and stacked to provide additional height.\n                                    <br/>\n                                    <img src=\"LaserCutMazes/assets/singleSheetPieces.png\"/>\n                                    <div class=\"image-caption\">the maze piece and plain floor</div>\n                                </dd>\n                            </dl>\n                        </div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"numRowsInput\">number of rows</label>\n                <div>\n                    <input id=\"numRowsInput\" [type]=\"numericInputType\" min=\"1\" step=\"1\" [(ngModel)]=\"mazeConfig.numRows\" name=\"numRowsInput\"/>\n                    <app-help-modal>\n                        <div class=\"title\">number of maze rows</div>\n                        <div class=\"body\">Number of rows, aka height. This is the number of horizontal lanes in the maze (positive integers only).</div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"numColsInput\">number of columns</label>\n                <div>\n                    <input id=\"numColsInput\" [type]=\"numericInputType\" min=\"1\" step=\"1\" [(ngModel)]=\"mazeConfig.numCols\" name=\"numColsInput\"/>\n                    <app-help-modal>\n                        <div class=\"title\">number of maze columns</div>\n                        <div class=\"body\">Number of columns, aka width. This is the number of vertical lanes in the maze (positive integers only).</div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"mazeUnitInput\">units</label>\n                <div>\n                    <select id=\"mazeUnitInput\" [(ngModel)]=\"mazeConfig.unit\" (change)=\"buildMaze()\" name=\"mazeUnitInput\">\n                        <option *ngFor=\"let u of mazeUnits\" [ngValue]=\"u\">{{u.pluralName}}</option>\n                    </select>\n                    <app-help-modal>\n                        <div class=\"title\">Maze Measurement Units</div>\n                        <div class=\"body\">These are the units used for the measurements below.</div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"wallHeightInput\" [ngClass]=\"{'disabled': printMode === PrintMode.SINGLE_SHEET}\">wall height</label>\n                <div>\n                    <input id=\"wallHeightInput\" [type]=\"numericInputType\" min=\".01\" step=\".25\" [(ngModel)]=\"mazeConfig.wallHeight\" (change)=\"buildMaze()\" name=\"wallHeightInput\" [disabled]=\"printMode === PrintMode.SINGLE_SHEET\"/>\n                    <app-help-modal>\n                        <div class=\"title\">Wall Height</div>\n                        <div [ngSwitch]=\"printMode\" class=\"body\">\n                            <div *ngSwitchCase=\"PrintMode.FLOOR_AND_WALL\">\n                                The height of the walls from the floor of the maze. This should be tall enough so that a marble rolling through the maze won't bounce over the walls.\n                                <img src=\"LaserCutMazes/assets/wallHeight.png\"/>\n                            </div>\n                            <div *ngSwitchCase=\"PrintMode.SINGLE_SHEET\">Not used in Single Sheet mode</div>\n                        </div>\n                    </app-help-modal>\n\n                </div>\n            </div>\n            <div class=\"row\">\n                <label [ngSwitch]=\"printMode\" for=\"materialThicknessInput\">\n                    <span *ngSwitchCase=\"PrintMode.FLOOR_AND_WALL\">material thickness</span>\n                    <span *ngSwitchCase=\"PrintMode.SINGLE_SHEET\">wall width</span>\n                </label>\n                <div>\n                    <input id=\"materialThicknessInput\" [type]=\"numericInputType\" min=\".01\" step=\".01\" [(ngModel)]=\"mazeConfig.materialThickness\" (change)=\"buildMaze()\" name=\"materialThicknessInput\"/>\n                    <app-help-modal>\n                        <div [ngSwitch]=\"printMode\" class=\"title\">\n                            <div *ngSwitchCase=\"PrintMode.FLOOR_AND_WALL\">Material Thickness</div>\n                            <div *ngSwitchCase=\"PrintMode.SINGLE_SHEET\">Wall Width</div>\n                        </div>\n                        <div class=\"body\" [ngSwitch]=\"printMode\">\n                            <div *ngSwitchCase=\"PrintMode.FLOOR_AND_WALL\">\n                                The thickness of the material being used to cut out the maze pieces. Note: this will also be the width of the walls once assembled.\n                                <img src=\"LaserCutMazes/assets/materialThickness.png\"/>\n                            </div>\n                            <div *ngSwitchCase=\"PrintMode.SINGLE_SHEET\">\n                                The width of the walls in between the hallways.\n                                <img src=\"LaserCutMazes/assets/singleSheetWallWidth.png\"/>\n                        </div>\n                        </div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"hallWidthInput\">hall width</label>\n                <div>\n                    <input id=\"hallWidthInput\" [type]=\"numericInputType\" min=\".1\" step=\".1\" [(ngModel)]=\"mazeConfig.hallWidth\" (change)=\"buildMaze()\" name=\"hallWidthInput\"/>\n                    <app-help-modal>\n                        <div class=\"title\">Hall width</div>\n                        <div class=\"body\">\n                            Hall width, or space between walls. This should be at least as big as the diameter of a marble that would be rolling through the maze.\n                            <img src=\"LaserCutMazes/assets/hallWidth.png\"/>\n                        </div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"separationSpaceInput\">separation space</label>\n                <div>\n                    <input id=\"separationSpaceInput\" [type]=\"numericInputType\" min=\"0\" step=\".01\" [(ngModel)]=\"mazeConfig.separationSpace\" (change)=\"buildMaze()\" name=\"separationSpaceInput\"/>\n                    <app-help-modal>\n                        <div class=\"title\">Separation Space</div>\n                        <div class=\"body\">\n                            The minimum space between separate pieces on the blueprint for laser cutting. If set to 0, no material will be wasted between pieces, but if the kerf of the laser is high, the pieces might end up too narrow/short.\n                            <img src=\"LaserCutMazes/assets/separationSpace.png\"/>\n                        </div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"algorithmInput\">algorithm</label>\n                <div>\n                    <select id=\"algorithmInput\" [(ngModel)]=\"currentAlgorithm\" (change)=\"buildMaze()\" name=\"algorithmInput\">\n                        <option *ngFor=\"let a of algorithms\" [ngValue]=\"a\">{{a.name}}</option>\n                    </select>\n                    <app-help-modal>\n                        <div class=\"title\">Maze Generation Algorithm</div>\n                        <div class=\"body\">\n                            <span>This is the algorithm that is used to randomly generate the maze.</span>\n                            <dl>\n                                <dt>Prim's Algorithm</dt>\n                                <dd>Method: start with all spaces having all walls closed. Randomly pick a space and add it to the maze path. Add all of its neighboring spaces to a list. While there are spaces in the list, remove a random one, pick a random neighbor, connect the two (remove the wall), and add the removed space's unexplored neighbors to the list. Repeat until all spaces have been visited. <a href=\"https://en.wikipedia.org/wiki/Prim%27s_algorithm\" target=\"_blank\">Prim's Algorithm on Wikipedia</a></dd>\n                                <dt>Kruskal's Algorithm</dt>\n                                <dd>Method: start with all spaces having all walls closed. Go over every wall that separates two spaces (outer walls not included). Randomly pick a wall. If the two spaces separated by the wall are not already connected by a path, remove the wall between them. Repeat until all spaces are on the same path. <a href=\"https://en.wikipedia.org/wiki/Kruskal%27s_algorithm\" target=\"_blank\">Kruskal's Algorithm on Wikipedia</a></dd>\n                                <dt>Depth-First Search</dt>\n                                <dd>Method: start with all spaces having all walls closed. Randomly pick a space and add it to the maze path. Move in a random direction and add that to the path. Continue until a dead end is reached, then backtrack until reaching a space where a fork is possible and pick a new direction. Continue until all spaces have been visited. This method tends to make mazes with long paths, dead ends, and not a lot of forks. <a href=\"https://en.wikipedia.org/wiki/Depth-first_search\" target=\"_blank\">Depth-First Search Algorithm on Wikipedia</a></dd>\n                                <dt>Do-It-Yourself</dt>\n                                <dd>This \"algorithm\" does nothing. You start out with a maze with all walls closed and click on walls to toggle them on/off and design your own maze.</dd>\n                            </dl>\n                        </div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"randomSeedInput\">random seed</label>\n                <div>\n                    <input id=\"randomSeedInput\" type=\"text\" [(ngModel)]=\"randomSeed\" (change)=\"buildMaze()\" (keyup)=\"buildMaze()\" name=\"randomSeedInput\"/>\n                    <app-help-modal>\n                        <div class=\"title\">Random Seed</div>\n                        <div class=\"body\">\n                            <p>The random seed is where the random number generator \"starts\" generating random numbers. It can be any string of numbers/letters/etc. If you enter a random seed, then the randomly generated maze will always be the same randomly generated maze as long as you use that seed.</p>\n                            <p>For example: if you use Prim's algorithm, enter a seed of \"rand12\", and choose 4 rows and 4 columns, you should see a maze that has a path from the top-left corner, to the top-right corner, to the bottom-right corner. You should be able to generate that same maze using the same row, column, and seed parameters at any time, in any browser, even if you refresh the page.</p>\n                        </div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <span>last seed used:</span>\n                <span>{{lastSeedUsed}}</span>\n            </div>\n        </div>\n        <div class=\"printer-inputs inputs\">\n            <div class=\"section-title\">\n                <span>Printer Configuration</span>\n                <app-help-modal [popLeft]=\"true\">\n                    <div class=\"title\">Printer Configuration</div>\n                    <div class=\"body\">These are configurations specific to the model of the printer that are needed by this tool.</div>\n                </app-help-modal>\n            </div>\n            <div class=\"row\">\n                <label for=\"maxPrinterUnits\">units</label>\n                <div>\n                    <select id=\"maxPrinterUnits\" [(ngModel)]=\"maxPrinterUnits\" (change)=\"buildMaze()\" name=\"maxPrinterUnits\">\n                        <option *ngFor=\"let u of mazeUnits\" [ngValue]=\"u\">{{u.pluralName}}</option>\n                    </select>\n                    <app-help-modal [popLeft]=\"true\">\n                        <div class=\"title\">Printer Dimension Units</div>\n                        <div class=\"body\">These are the units used for the measurements below.</div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"printerPpu\">pixels per {{maxPrinterUnits.singularName}}</label>\n                <div>\n                    <input [type]=\"numericInputType\" min=\"1\" step=\"1\" [(ngModel)]=\"ppu\" (change)=\"buildMaze()\" name=\"printerPpu\"/>\n                    <app-help-modal [popLeft]=\"true\">\n                        <div class=\"title\">Pixels per Unit</div>\n                        <div class=\"body\">\n                            The number of pixels that the laser cutter interprets as being the length of the selected unit. E.g. Choosing inches and 96 would mean\n                            96 pixels per inch, aka 96 dots per inch (DPI).\n                        </div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"maxWidthInput\">max printer width</label>\n                <div>\n                    <input id=\"maxWidthInput\" [type]=\"numericInputType\" min=\"1\" [(ngModel)]=\"maxWidth\" (change)=\"buildMaze()\" name=\"maxWidthInput\"/>\n                    <app-help-modal [popLeft]=\"true\">\n                        <div class=\"title\">Max Printer Width</div>\n                        <div class=\"body\">The width of the laser cutter's printable area</div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"maxHeightInput\">max printer height</label>\n                <div>\n                    <input id=\"maxHeightInput\" [type]=\"numericInputType\" min=\"1\" [(ngModel)]=\"maxHeight\" (change)=\"buildMaze()\" name=\"maxHeightInput\"/>\n                    <app-help-modal [popLeft]=\"true\">\n                        <div class=\"title\">Max Printer Height</div>\n                        <div class=\"body\">The height of the laser cutter's printable area</div>\n                    </app-help-modal>\n                </div>\n            </div>\n        </div>\n        <div class=\"calibration-inputs inputs\">\n            <div class=\"section-title\">\n                <span>Calibration Rectangle Configuration</span>\n                <app-help-modal [popLeft]=\"true\">\n                    <div class=\"title\">Calibration Rectangle</div>\n                    <div class=\"body\">\n                        <p>All measurement inputs are used to calculate pixel-perfect-sized cutouts in the SVG, however some laser cutter software might scale images down or up. Since the pieces are interlocking, scaling the image will make them not fit together properly.</p>\n                        <p>If your laser cutter software scales the image, you can use the calibration rectangle as a guide to restore the correct scale. For Example: if your laser cutter has a ruler on the edge of the canvas with inch measurements, you can create a calibration rectangle 6 inches wide and scale the image back up/down until the rectangle is 6 inches according to that ruler, then the pieces should be cut at the correct size.</p>\n                        <p>IMPORTANT NOTE: Once you've used the rectangle to calibrate the scale, make sure not to cut or engrave it on the material.</p>\n                    </div>\n                </app-help-modal>\n            </div>\n            <div class=\"row\">\n                <label for=\"includeCalibrationRectangleInput\">include in SVG</label>\n                <div>\n                    <input id=\"includeCalibrationRectangleInput\" type=\"checkbox\" [(ngModel)]=\"includeCalibrationRectangle\" (change)=\"buildMaze()\" name=\"includeCalibrationRectangleInput\"/>\n                    <app-help-modal [popLeft]=\"true\">\n                        <div class=\"title\">Include Calibration Rectangle</div>\n                        <div class=\"body\">Check this box to include the calibration rectangle in the exported SVG.</div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"calibrationRectangleUnitInput\">units</label>\n                <div>\n                    <select id=\"calibrationRectangleUnitInput\" [(ngModel)]=\"calibrationRectangleConfig.unit\" (change)=\"buildMaze()\" name=\"calibrationRectangleUnitInput\">\n                        <option *ngFor=\"let u of rectangleUnits\" [ngValue]=\"u\">{{u.pluralName}}</option>\n                    </select>\n                    <app-help-modal [popLeft]=\"true\">\n                        <div class=\"title\">Calibration Rectangle Units</div>\n                        <div class=\"body\">These are the units used for the measurements below.</div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"calibrationRectangleWidthInput\">rectangle width</label>\n                <div>\n                    <input id=\"calibrationRectangleWidthInput\" [type]=\"numericInputType\" min=\"1\" step=\"1\" [(ngModel)]=\"calibrationRectangleConfig.width\" (change)=\"buildMaze()\" name=\"calibrationRectangleWidthInput\"/>\n                    <app-help-modal [popLeft]=\"true\">\n                        <div class=\"title\">Rectangle Width</div>\n                        <div class=\"body\">The width of the rectangle in the specified units (positive integers only).</div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <label for=\"calibrationRectangleHeightInput\">rectangle height</label>\n                <div>\n                    <input id=\"calibrationRectangleHeightInput\" [type]=\"numericInputType\" min=\"1\" step=\"1\" [(ngModel)]=\"calibrationRectangleConfig.height\" (change)=\"buildMaze()\" name=\"calibrationRectangleHeightInput\"/>\n                    <app-help-modal [popLeft]=\"true\">\n                        <div class=\"title\">Rectangle Height</div>\n                        <div class=\"body\">The height of the rectangle in the specified units (positive integers only).</div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <span>horizontal alignment</span>\n                <div>\n                    <label for=\"calibrationRectangleLeftInput\">left</label>\n                    <input id=\"calibrationRectangleLeftInput\" type=\"radio\" [value]=\"true\" [(ngModel)]=\"calibrationRectangleConfig.leftAligned\" (change)=\"buildMaze()\" name=\"horizontalRadio\"/>\n                    <label for=\"calibrationRectangleRightInput\">right</label>\n                    <input id=\"calibrationRectangleRightInput\" type=\"radio\" [value]=\"false\" [(ngModel)]=\"calibrationRectangleConfig.leftAligned\" (change)=\"buildMaze()\" name=\"horizontalRadio\"/>\n                    <app-help-modal [popLeft]=\"true\">\n                        <div class=\"title\">Rectangle Horizontal Alignment</div>\n                        <div class=\"body\">The rectangle can be aligned to the left or right side of the printing area.</div>\n                    </app-help-modal>\n                </div>\n            </div>\n            <div class=\"row\">\n                <span>vertical alignment</span>\n                <div>\n                    <label for=\"calibrationRectangleTopInput\">top</label>\n                    <input id=\"calibrationRectangleTopInput\" type=\"radio\" [value]=\"true\" [(ngModel)]=\"calibrationRectangleConfig.topAligned\" (change)=\"buildMaze()\" name=\"verticalRadio\"/>\n                    <label for=\"calibrationRectangleBottomInput\">bottom</label>\n                    <input id=\"calibrationRectangleBottomInput\" type=\"radio\" [value]=\"false\" [(ngModel)]=\"calibrationRectangleConfig.topAligned\" (change)=\"buildMaze()\" name=\"verticalRadio\"/>\n                    <app-help-modal [popLeft]=\"true\">\n                        <div class=\"title\">Rectangle Vertical Alignment</div>\n                        <div class=\"body\">The rectangle can be aligned to the top or bottom of the printing area.</div>\n                    </app-help-modal>\n                </div>\n            </div>\n        </div>\n    </div>\n    <input type=\"button\" (click)=\"buildMaze()\" value=\"Regenerate\" [disabled]=\"!mazeConfig.numRows || !mazeConfig.numCols\"/>\n    <app-help-modal>\n        <div class=\"title\">Generate a New Random Maze</div>\n        <div class=\"body\">The maze is automatically rebuilt when you change any of the inputs. You can use this to manually generate a different random maze, but only if you don't set a random seed.</div>\n    </app-help-modal>\n    <div *ngIf=\"maze\" class=\"group\">\n        <table class=\"maze\">\n            <tr *ngFor=\"let row of maze.grid; let r = index\">\n                <td *ngFor=\"let elem of row; let c = index\" [ngClass]=\"{'northWall': !elem.northOpen, 'eastWall': !elem.eastOpen, 'southWall': !elem.southOpen, 'westWall': !elem.westOpen}\" (click)=\"onClickMazeCell($event, r, c)\"></td>\n            </tr>\n        </table>\n        <div class=\"try-clicking\">&lt;- Try clicking on the walls of the maze to toggle them</div>\n    </div>\n    <input type=\"button\" (click)=\"exportSvg()\" value=\"Export SVG Blueprint\" [disabled]=\"!maze\"/>\n    <app-help-modal>\n        <div class=\"title\">Export Maze Design to an SVG Blueprint</div>\n        <div class=\"body\">Once you've created a maze that you like with the above settings, click here to create the SVG file for download.</div>\n    </app-help-modal>\n    <label for=\"auto-svg\">Automatic SVG generation is {{autoGenerateSvg ? \"on\" : \"off\"}}</label><input id=\"auto-svg\" type=\"checkbox\" [(ngModel)]=\"autoGenerateSvg\" name=\"autoSvgCheckbox\"/>\n</form>\n<input type=\"button\" (click)=\"downloadSvg()\" value=\"Download\" [disabled]=\"!rawSvgSrc\"/>\n<label for=\"svg-preview\">SVG preview is {{showSvgPreview ? \"on\" : \"off\"}}</label><input id=\"svg-preview\" type=\"checkbox\" [(ngModel)]=\"showSvgPreview\" name=\"svgPreviewCheckbox\"/>\n<app-help-modal>\n    <div class=\"title\">Toggle SVG Preview</div>\n    <div class=\"body\">Click here to toggle the SVG preview. If an SVG has been generated, this will show the blueprint here in the page.</div>\n</app-help-modal>\n<span *ngIf=\"outOfBounds\">\n    <span class=\"out-of-bounds\">Warning: SVG is out of bounds of print area</span>\n    <app-help-modal [popLeft]=\"true\">\n        <div class=\"title\">Out of Bounds</div>\n        <div class=\"body\">\n            The maze is big enough that the pieces don't fit within the printing area.\n            See the help page for more info on what to do in this situation.\n        </div>\n    </app-help-modal>\n</span>\n<div class=\"svg-preview\" *ngIf=\"showSvgPreview\" [innerHTML]=\"safeSvgSrc || ''\"></div>\n"
 
 /***/ }),
 
@@ -1582,12 +1694,14 @@ module.exports = "<div>\n    <p>To get started, enter some values for the maze d
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_app_factories_linear_wall_model_generator__ = __webpack_require__("./src/app/factories/linear-wall-model-generator.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_app_factories_rectangular_wall_model_generator__ = __webpack_require__("./src/app/factories/rectangular-wall-model-generator.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_app_factories_sheet_wall_model_generator__ = __webpack_require__("./src/app/factories/sheet-wall-model-generator.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_app_misc_big_util__ = __webpack_require__("./src/app/misc/big-util.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_app_models_calibration_rectangle__ = __webpack_require__("./src/app/models/calibration-rectangle.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_app_models_maze__ = __webpack_require__("./src/app/models/maze.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_app_models_maze_config__ = __webpack_require__("./src/app/models/maze-config.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_app_direction__ = __webpack_require__("./src/app/direction.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_app_maze_printer__ = __webpack_require__("./src/app/maze-printer.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_app_factories_single_sheet_model_generator__ = __webpack_require__("./src/app/factories/single-sheet-model-generator.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_app_misc_big_util__ = __webpack_require__("./src/app/misc/big-util.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_app_models_calibration_rectangle__ = __webpack_require__("./src/app/models/calibration-rectangle.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_app_models_maze__ = __webpack_require__("./src/app/models/maze.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_app_models_maze_config__ = __webpack_require__("./src/app/models/maze-config.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_app_direction__ = __webpack_require__("./src/app/direction.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19_app_maze_printer__ = __webpack_require__("./src/app/maze-printer.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20_app_print_mode__ = __webpack_require__("./src/app/print-mode.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1616,19 +1730,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 var MazeBuilderComponent = /** @class */ (function () {
     function MazeBuilderComponent(sanitizer) {
         this.sanitizer = sanitizer;
-        this.mazeUnits = [__WEBPACK_IMPORTED_MODULE_9_app_common_unit__["a" /* default */].INCHES, __WEBPACK_IMPORTED_MODULE_9_app_common_unit__["a" /* default */].CENTIMETERS, __WEBPACK_IMPORTED_MODULE_9_app_common_unit__["a" /* default */].MILLIMETERS];
+        this.PrintMode = __WEBPACK_IMPORTED_MODULE_20_app_print_mode__["a" /* default */];
+        this.mazeUnits = __WEBPACK_IMPORTED_MODULE_9_app_common_unit__["a" /* default */].values();
         this.rectangleUnits = [__WEBPACK_IMPORTED_MODULE_9_app_common_unit__["a" /* default */].INCHES, __WEBPACK_IMPORTED_MODULE_9_app_common_unit__["a" /* default */].CENTIMETERS];
-        this.mazeConfig = new __WEBPACK_IMPORTED_MODULE_16_app_models_maze_config__["a" /* default */]();
+        this.printModes = __WEBPACK_IMPORTED_MODULE_20_app_print_mode__["a" /* default */].values();
+        this.mazeConfig = new __WEBPACK_IMPORTED_MODULE_17_app_models_maze_config__["a" /* default */]();
+        this.printMode = __WEBPACK_IMPORTED_MODULE_20_app_print_mode__["a" /* default */].FLOOR_AND_WALL;
         this.randomSeed = "";
         this.maxWidth = 19.5;
         this.maxHeight = 11;
         this.maxPrinterUnits = __WEBPACK_IMPORTED_MODULE_9_app_common_unit__["a" /* default */].INCHES;
         this.ppu = 96;
         this.includeCalibrationRectangle = false;
-        this.calibrationRectangleConfig = new __WEBPACK_IMPORTED_MODULE_14_app_models_calibration_rectangle__["a" /* default */]();
+        this.calibrationRectangleConfig = new __WEBPACK_IMPORTED_MODULE_15_app_models_calibration_rectangle__["a" /* default */]();
         this.algorithms = [new __WEBPACK_IMPORTED_MODULE_4_app_algorithms_depth_first_search_algorithm__["a" /* default */](), new __WEBPACK_IMPORTED_MODULE_7_app_algorithms_prims_algorithm__["a" /* default */](), new __WEBPACK_IMPORTED_MODULE_6_app_algorithms_kruskals_algorithm__["a" /* default */](), new __WEBPACK_IMPORTED_MODULE_5_app_algorithms_empty_algorithm__["a" /* default */]()];
         this.currentAlgorithm = this.algorithms[0];
         this._showSvgPreview = false;
@@ -1697,7 +1816,7 @@ var MazeBuilderComponent = /** @class */ (function () {
             return;
         }
         var start = new Date().getTime();
-        var maze = new __WEBPACK_IMPORTED_MODULE_15_app_models_maze__["a" /* default */](this.mazeConfig.numCols, this.mazeConfig.numRows);
+        var maze = new __WEBPACK_IMPORTED_MODULE_16_app_models_maze__["a" /* default */](this.mazeConfig.numCols, this.mazeConfig.numRows);
         this.currentAlgorithm.seed = this.randomSeed.toString().length > 0 ? this.randomSeed : new Date().getTime();
         this.lastSeedUsed = this.currentAlgorithm.seed.toString();
         maze.build(this.currentAlgorithm);
@@ -1745,16 +1864,16 @@ var MazeBuilderComponent = /** @class */ (function () {
         }
     };
     MazeBuilderComponent.prototype.getAdjacentCellDelta = function (direction) {
-        if (direction === __WEBPACK_IMPORTED_MODULE_17_app_direction__["a" /* default */].NORTH) {
+        if (direction === __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].NORTH) {
             return new __WEBPACK_IMPORTED_MODULE_8_app_common_ordered_pair__["a" /* default */](0, -1);
         }
-        else if (direction === __WEBPACK_IMPORTED_MODULE_17_app_direction__["a" /* default */].EAST) {
+        else if (direction === __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].EAST) {
             return new __WEBPACK_IMPORTED_MODULE_8_app_common_ordered_pair__["a" /* default */](1, 0);
         }
-        else if (direction === __WEBPACK_IMPORTED_MODULE_17_app_direction__["a" /* default */].SOUTH) {
+        else if (direction === __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].SOUTH) {
             return new __WEBPACK_IMPORTED_MODULE_8_app_common_ordered_pair__["a" /* default */](0, 1);
         }
-        else if (direction === __WEBPACK_IMPORTED_MODULE_17_app_direction__["a" /* default */].WEST) {
+        else if (direction === __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].WEST) {
             return new __WEBPACK_IMPORTED_MODULE_8_app_common_ordered_pair__["a" /* default */](-1, 0);
         }
         throw new Error("invalid direction");
@@ -1769,16 +1888,35 @@ var MazeBuilderComponent = /** @class */ (function () {
         var linearWallModel = linearWallModelGenerator.generate();
         var rectangularWallModelGenerator = new __WEBPACK_IMPORTED_MODULE_11_app_factories_rectangular_wall_model_generator__["a" /* default */](linearWallModel);
         var rectangularWallModel = rectangularWallModelGenerator.generate();
-        var sheetWallModelGenerator = new __WEBPACK_IMPORTED_MODULE_12_app_factories_sheet_wall_model_generator__["a" /* default */](rectangularWallModel);
-        sheetWallModelGenerator.hallWidth = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.hallWidth).mul(multiplier);
-        sheetWallModelGenerator.materialThickness = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.materialThickness).mul(multiplier);
-        sheetWallModelGenerator.maxHeight = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxHeight).mul(this.ppu);
-        sheetWallModelGenerator.maxWidth = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxWidth).mul(this.ppu);
-        sheetWallModelGenerator.notchHeight = Object(__WEBPACK_IMPORTED_MODULE_13_app_misc_big_util__["c" /* min */])(this.maxPrinterUnits.perInch.mul(this.ppu).div(__WEBPACK_IMPORTED_MODULE_9_app_common_unit__["a" /* default */].MILLIMETERS.perInch).mul(4), new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.hallWidth).mul(multiplier).mul(".33"));
-        sheetWallModelGenerator.separationSpace = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.separationSpace).mul(multiplier);
-        sheetWallModelGenerator.wallHeight = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.wallHeight).mul(multiplier);
-        var sheetWallModel = sheetWallModelGenerator.generate();
-        var mazePrinter = new __WEBPACK_IMPORTED_MODULE_18_app_maze_printer__["a" /* default */](sheetWallModel, new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxWidth).mul(this.ppu), new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxHeight).mul(this.ppu), this.maxPrinterUnits, this.ppu);
+        var mazePrinter;
+        if (this.printMode === __WEBPACK_IMPORTED_MODULE_20_app_print_mode__["a" /* default */].FLOOR_AND_WALL) {
+            var sheetWallModelGenerator = new __WEBPACK_IMPORTED_MODULE_12_app_factories_sheet_wall_model_generator__["a" /* default */](rectangularWallModel);
+            sheetWallModelGenerator.hallWidth = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.hallWidth).mul(multiplier);
+            sheetWallModelGenerator.materialThickness = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.materialThickness).mul(multiplier);
+            sheetWallModelGenerator.maxHeight = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxHeight).mul(this.ppu);
+            sheetWallModelGenerator.maxWidth = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxWidth).mul(this.ppu);
+            sheetWallModelGenerator.notchHeight = Object(__WEBPACK_IMPORTED_MODULE_14_app_misc_big_util__["c" /* min */])(this.maxPrinterUnits.perInch.mul(this.ppu).div(__WEBPACK_IMPORTED_MODULE_9_app_common_unit__["a" /* default */].MILLIMETERS.perInch).mul(4), new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.hallWidth).mul(multiplier).mul(".33"));
+            sheetWallModelGenerator.separationSpace = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.separationSpace).mul(multiplier);
+            sheetWallModelGenerator.wallHeight = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.wallHeight).mul(multiplier);
+            var sheetWallModel = sheetWallModelGenerator.generate();
+            this.outOfBounds = sheetWallModel.outOfBounds;
+            mazePrinter = new __WEBPACK_IMPORTED_MODULE_19_app_maze_printer__["a" /* default */](sheetWallModel, new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxWidth).mul(this.ppu), new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxHeight).mul(this.ppu), this.maxPrinterUnits, this.ppu);
+        }
+        else if (this.printMode === __WEBPACK_IMPORTED_MODULE_20_app_print_mode__["a" /* default */].SINGLE_SHEET) {
+            var singleSheetModelGenerator = new __WEBPACK_IMPORTED_MODULE_13_app_factories_single_sheet_model_generator__["a" /* default */](rectangularWallModel);
+            singleSheetModelGenerator.hallWidth = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.hallWidth).mul(multiplier);
+            singleSheetModelGenerator.wallWidth = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.materialThickness).mul(multiplier);
+            singleSheetModelGenerator.maxHeight = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxHeight).mul(this.ppu);
+            singleSheetModelGenerator.maxWidth = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxWidth).mul(this.ppu);
+            singleSheetModelGenerator.separationSpace = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.separationSpace).mul(multiplier);
+            var singleSheetModel = singleSheetModelGenerator.generate();
+            this.outOfBounds = singleSheetModel.outOfBounds;
+            mazePrinter = new __WEBPACK_IMPORTED_MODULE_19_app_maze_printer__["a" /* default */](singleSheetModel, new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxWidth).mul(this.ppu), new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxHeight).mul(this.ppu), this.maxPrinterUnits, this.ppu);
+        }
+        else {
+            console.error("impossible PrintMode enum: ", this.printMode);
+            return;
+        }
         if (this.includeCalibrationRectangle) {
             this.rawSvgSrc = mazePrinter.printSvg(this.consolidateConfigs(), this.calibrationRectangleConfig);
         }
@@ -1786,14 +1924,13 @@ var MazeBuilderComponent = /** @class */ (function () {
             this.rawSvgSrc = mazePrinter.printSvg(this.consolidateConfigs());
         }
         this.safeSvgSrc = this.sanitizer.bypassSecurityTrustHtml(this.rawSvgSrc);
-        this.outOfBounds = sheetWallModel.outOfBounds;
         console.info("svg export time: " + (new Date().getTime() - start) + " ms");
         if (!this.autoGenerateSvg && this.trackEvents) {
             window.ga("send", {
                 hitType: "event",
                 eventCategory: "Designer",
                 eventAction: "export",
-                eventLabel: this.currentAlgorithm.name
+                eventLabel: this.currentAlgorithm.name + "-" + this.printMode.name
             });
         }
     };
@@ -1804,14 +1941,14 @@ var MazeBuilderComponent = /** @class */ (function () {
             hitType: "event",
             eventCategory: "Designer",
             eventAction: "download",
-            eventLabel: this.currentAlgorithm.name
+            eventLabel: this.currentAlgorithm.name + "-" + this.printMode.name
         });
     };
     MazeBuilderComponent.prototype.benchmark = function () {
         var start = new Date().getTime();
         this.mazeConfig.numCols = 8;
         this.mazeConfig.numRows = 8;
-        this.buildMaze();
+        // no need to call buildMaze() because it gets called automatically by the changeListener
         this.exportSvg();
         var end = new Date().getTime();
         this.mazeConfig.numCols = 0;
@@ -1824,27 +1961,27 @@ var MazeBuilderComponent = /** @class */ (function () {
         var threshold = .3;
         if (x < threshold) {
             if (y < threshold) {
-                return __WEBPACK_IMPORTED_MODULE_17_app_direction__["a" /* default */].NORTH;
+                return __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].NORTH;
             }
             else if (y > 1 - threshold) {
-                return __WEBPACK_IMPORTED_MODULE_17_app_direction__["a" /* default */].SOUTH;
+                return __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].SOUTH;
             }
-            return __WEBPACK_IMPORTED_MODULE_17_app_direction__["a" /* default */].WEST;
+            return __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].WEST;
         }
         else if (x > 1 - threshold) {
             if (y < threshold) {
-                return __WEBPACK_IMPORTED_MODULE_17_app_direction__["a" /* default */].NORTH;
+                return __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].NORTH;
             }
             else if (y > 1 - threshold) {
-                return __WEBPACK_IMPORTED_MODULE_17_app_direction__["a" /* default */].SOUTH;
+                return __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].SOUTH;
             }
-            return __WEBPACK_IMPORTED_MODULE_17_app_direction__["a" /* default */].EAST;
+            return __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].EAST;
         }
         if (y < threshold) {
-            return __WEBPACK_IMPORTED_MODULE_17_app_direction__["a" /* default */].NORTH;
+            return __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].NORTH;
         }
         if (y > 1 - threshold) {
-            return __WEBPACK_IMPORTED_MODULE_17_app_direction__["a" /* default */].SOUTH;
+            return __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].SOUTH;
         }
         return null;
     };
@@ -1872,17 +2009,26 @@ var MazeBuilderComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__ = __webpack_require__("./src/app/common/ordered-pair.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__ = __webpack_require__("./src/app/misc/big-util.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_misc_svg_header__ = __webpack_require__("./src/app/misc/svg-header.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_app_svg_path__ = __webpack_require__("./src/app/svg/path.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_app_svg_svg_element_generator__ = __webpack_require__("./src/app/svg/svg-element-generator.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_app_models_sheet_wall_model__ = __webpack_require__("./src/app/models/sheet-wall-model.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_app_svg_path__ = __webpack_require__("./src/app/svg/path.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_app_svg_svg_element_generator__ = __webpack_require__("./src/app/svg/svg-element-generator.ts");
+
 
 
 
 
 
 var MazePrinter = /** @class */ (function () {
-    function MazePrinter(sheetWallModel, maxWidth, maxHeight, printerUnits, ppu) {
+    function MazePrinter(model, maxWidth, maxHeight, printerUnits, ppu) {
+        this.singleSheetModel = null;
+        this.sheetWallModel = null;
         this.precision = 5;
-        this.sheetWallModel = sheetWallModel;
+        if (model instanceof __WEBPACK_IMPORTED_MODULE_3_app_models_sheet_wall_model__["a" /* default */]) {
+            this.sheetWallModel = model;
+        }
+        else {
+            this.singleSheetModel = model;
+        }
         this.maxWidth = maxWidth;
         this.maxHeight = maxHeight;
         this.printerUnits = printerUnits;
@@ -1895,66 +2041,94 @@ var MazePrinter = /** @class */ (function () {
      */
     MazePrinter.prototype.printSvg = function (configs, calibrationRectangle) {
         var result = __WEBPACK_IMPORTED_MODULE_2_app_misc_svg_header__["a" /* default */];
-        result = result.replace("{width}", this.sheetWallModel.maxHorizontalDisplacement.plus(5).toString())
-            .replace("{height}", this.sheetWallModel.maxVerticalDisplacement.plus(5).toString());
-        result += this.createConfigComment(configs);
-        var svgElementGenerator = new __WEBPACK_IMPORTED_MODULE_4_app_svg_svg_element_generator__["a" /* default */]();
-        result += "<g id=\"floor-notches\">";
-        for (var _i = 0, _a = this.sheetWallModel.floorNotches.paths; _i < _a.length; _i++) {
-            var notch = _a[_i];
-            var svgPath = svgElementGenerator.modelPathToSvgPath(notch);
-            result += svgElementGenerator.pathToSvgText(svgPath, this.precision);
-        }
-        result += "</g>\n";
-        result += "<g id=\"floor-numbers\">";
-        for (var _b = 0, _c = this.sheetWallModel.floorNumbers; _b < _c.length; _b++) {
-            var floorNumber = _c[_b];
-            result += svgElementGenerator.vectorNumberToSvgText(floorNumber, this.precision);
-        }
-        result += "</g>\n";
-        result += "<g id=\"wall-numbers\">";
-        var wallLabelValues = [];
-        var valIter = this.sheetWallModel.wallLabels.values();
-        var vObj;
-        while (!(vObj = valIter.next()).done) {
-            wallLabelValues.push(vObj.value);
-        }
-        for (var _d = 0, wallLabelValues_1 = wallLabelValues; _d < wallLabelValues_1.length; _d++) {
-            var wallNumber = wallLabelValues_1[_d];
-            result += svgElementGenerator.vectorNumberToSvgText(wallNumber, this.precision);
-        }
-        result += "</g>\n";
-        result += "<g id=\"walls\">";
-        for (var _e = 0, _f = this.sheetWallModel.walls; _e < _f.length; _e++) {
-            var shape = _f[_e];
-            for (var _g = 0, _h = shape.paths; _g < _h.length; _g++) {
-                var wall = _h[_g];
-                var svgPath = svgElementGenerator.modelPathToSvgPath(wall);
+        var svgElementGenerator = new __WEBPACK_IMPORTED_MODULE_5_app_svg_svg_element_generator__["a" /* default */]();
+        var outOfBounds;
+        if (this.sheetWallModel !== null) {
+            outOfBounds = this.sheetWallModel.outOfBounds;
+            result = result.replace("{width}", this.sheetWallModel.maxHorizontalDisplacement.plus(5).toString())
+                .replace("{height}", this.sheetWallModel.maxVerticalDisplacement.plus(5).toString());
+            result += this.createConfigComment(configs);
+            result += "<g id=\"floor-notches\">";
+            for (var _i = 0, _a = this.sheetWallModel.floorNotches.paths; _i < _a.length; _i++) {
+                var notch = _a[_i];
+                var svgPath = svgElementGenerator.modelPathToSvgPath(notch);
                 result += svgElementGenerator.pathToSvgText(svgPath, this.precision);
             }
+            result += "</g>\n";
+            result += "<g id=\"floor-numbers\">";
+            for (var _b = 0, _c = this.sheetWallModel.floorNumbers; _b < _c.length; _b++) {
+                var floorNumber = _c[_b];
+                result += svgElementGenerator.vectorNumberToSvgText(floorNumber, this.precision);
+            }
+            result += "</g>\n";
+            result += "<g id=\"wall-numbers\">";
+            var wallLabelValues = [];
+            var valIter = this.sheetWallModel.wallLabels.values();
+            var vObj = void 0;
+            while (!(vObj = valIter.next()).done) {
+                wallLabelValues.push(vObj.value);
+            }
+            for (var _d = 0, wallLabelValues_1 = wallLabelValues; _d < wallLabelValues_1.length; _d++) {
+                var wallNumber = wallLabelValues_1[_d];
+                result += svgElementGenerator.vectorNumberToSvgText(wallNumber, this.precision);
+            }
+            result += "</g>\n";
+            result += "<g id=\"walls\">";
+            for (var _e = 0, _f = this.sheetWallModel.walls; _e < _f.length; _e++) {
+                var shape = _f[_e];
+                for (var _g = 0, _h = shape.paths; _g < _h.length; _g++) {
+                    var wall = _h[_g];
+                    var svgPath = svgElementGenerator.modelPathToSvgPath(wall);
+                    result += svgElementGenerator.pathToSvgText(svgPath, this.precision);
+                }
+            }
+            result += "</g>\n";
+            result += "<g id=\"floor-outline\">";
+            for (var _j = 0, _k = this.sheetWallModel.floorOutline.paths; _j < _k.length; _j++) {
+                var outlinePath = _k[_j];
+                var svgPath = svgElementGenerator.modelPathToSvgPath(outlinePath);
+                svgPath.style = svgPath.style.replace("#000000", "#ff0000");
+                result += svgElementGenerator.pathToSvgText(svgPath, this.precision);
+            }
+            result += "</g>\n";
         }
-        result += "</g>\n";
-        result += "<g id=\"floor-outline\">";
-        for (var _j = 0, _k = this.sheetWallModel.floorOutline.paths; _j < _k.length; _j++) {
-            var outlinePath = _k[_j];
-            var svgPath = svgElementGenerator.modelPathToSvgPath(outlinePath);
-            svgPath.style = svgPath.style.replace("#000000", "#ff0000");
-            result += svgElementGenerator.pathToSvgText(svgPath, this.precision);
+        else if (this.singleSheetModel !== null) {
+            outOfBounds = this.singleSheetModel.outOfBounds;
+            result = result.replace("{width}", this.singleSheetModel.maxHorizontalDisplacement.plus(5).toString())
+                .replace("{height}", this.singleSheetModel.maxVerticalDisplacement.plus(5).toString());
+            result += this.createConfigComment(configs);
+            result += "<g id=\"floor-outline\">";
+            for (var _l = 0, _m = this.singleSheetModel.floorOutline.paths; _l < _m.length; _l++) {
+                var path = _m[_l];
+                var svgPath = svgElementGenerator.modelPathToSvgPath(path);
+                svgPath.style = svgPath.style.replace("#000000", "#ff0000");
+                result += svgElementGenerator.pathToSvgText(svgPath, this.precision);
+            }
+            result += "</g>\n";
+            result += "<g id=\"holes\">";
+            for (var _o = 0, _p = this.singleSheetModel.holes.paths; _o < _p.length; _o++) {
+                var hole = _p[_o];
+                var svgPath = svgElementGenerator.modelPathToSvgPath(hole);
+                result += svgElementGenerator.pathToSvgText(svgPath, this.precision);
+            }
+            result += "</g>\n";
         }
-        result += "</g>\n";
+        else {
+            throw new Error("illegal state: can't call MazePrinter#print() without a model");
+        }
         if (calibrationRectangle != null) {
             result += "<g id=\"calibration-rectangle\">";
-            for (var _l = 0, _m = this.buildCalibrationRectangle(calibrationRectangle); _l < _m.length; _l++) {
-                var rectSide = _m[_l];
+            for (var _q = 0, _r = this.buildCalibrationRectangle(calibrationRectangle); _q < _r.length; _q++) {
+                var rectSide = _r[_q];
                 rectSide.style = rectSide.style.replace("000000", "00ff00");
                 result += svgElementGenerator.pathToSvgText(rectSide, this.precision);
             }
             result += "</g>\n";
         }
-        if (this.sheetWallModel.outOfBounds) {
+        if (outOfBounds) {
             result += "<g id=\"bounding-box\">";
-            for (var _o = 0, _p = this.buildBoundingBoxRectangle(); _o < _p.length; _o++) {
-                var rectSide = _p[_o];
+            for (var _s = 0, _t = this.buildBoundingBoxRectangle(); _s < _t.length; _s++) {
+                var rectSide = _t[_s];
                 rectSide.style = rectSide.style.replace("000000", "ff00ff");
                 result += svgElementGenerator.pathToSvgText(rectSide, this.precision);
             }
@@ -1982,11 +2156,11 @@ var MazePrinter = /** @class */ (function () {
             topLeft.y = this.maxHeight.sub(height);
         }
         var topRight = new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](topLeft.x.add(width), topLeft.y), bottomRight = new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](topRight.x, topLeft.y.add(height)), bottomLeft = new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](topLeft.x, bottomRight.y);
-        var top = new __WEBPACK_IMPORTED_MODULE_3_app_svg_path__["a" /* default */](topLeft, topRight), right = new __WEBPACK_IMPORTED_MODULE_3_app_svg_path__["a" /* default */](topRight, bottomRight), bottom = new __WEBPACK_IMPORTED_MODULE_3_app_svg_path__["a" /* default */](bottomRight, bottomLeft), left = new __WEBPACK_IMPORTED_MODULE_3_app_svg_path__["a" /* default */](bottomLeft, topLeft);
+        var top = new __WEBPACK_IMPORTED_MODULE_4_app_svg_path__["a" /* default */](topLeft, topRight), right = new __WEBPACK_IMPORTED_MODULE_4_app_svg_path__["a" /* default */](topRight, bottomRight), bottom = new __WEBPACK_IMPORTED_MODULE_4_app_svg_path__["a" /* default */](bottomRight, bottomLeft), left = new __WEBPACK_IMPORTED_MODULE_4_app_svg_path__["a" /* default */](bottomLeft, topLeft);
         return [top, right, bottom, left];
     };
     MazePrinter.prototype.buildBoundingBoxRectangle = function () {
-        var top = new __WEBPACK_IMPORTED_MODULE_3_app_svg_path__["a" /* default */](new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](__WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */], __WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */]), new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](this.maxWidth, __WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */])), right = new __WEBPACK_IMPORTED_MODULE_3_app_svg_path__["a" /* default */](new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](this.maxWidth, __WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */]), new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](this.maxWidth, this.maxHeight)), bottom = new __WEBPACK_IMPORTED_MODULE_3_app_svg_path__["a" /* default */](new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](this.maxWidth, this.maxHeight), new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](__WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */], this.maxHeight)), left = new __WEBPACK_IMPORTED_MODULE_3_app_svg_path__["a" /* default */](new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](__WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */], this.maxHeight), new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](__WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */], __WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */]));
+        var top = new __WEBPACK_IMPORTED_MODULE_4_app_svg_path__["a" /* default */](new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](__WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */], __WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */]), new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](this.maxWidth, __WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */])), right = new __WEBPACK_IMPORTED_MODULE_4_app_svg_path__["a" /* default */](new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](this.maxWidth, __WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */]), new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](this.maxWidth, this.maxHeight)), bottom = new __WEBPACK_IMPORTED_MODULE_4_app_svg_path__["a" /* default */](new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](this.maxWidth, this.maxHeight), new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](__WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */], this.maxHeight)), left = new __WEBPACK_IMPORTED_MODULE_4_app_svg_path__["a" /* default */](new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](__WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */], this.maxHeight), new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](__WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */], __WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */]));
         return [top, right, bottom, left];
     };
     return MazePrinter;
@@ -2135,6 +2309,9 @@ var CalibrationRectangle = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Wall; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_app_direction__ = __webpack_require__("./src/app/direction.ts");
 
+/**
+ * A wall within a LinearWallModel. The model is a 2D top-down representation of a maze. Walls have no depth
+ */
 var Wall = /** @class */ (function () {
     function Wall(a, b) {
         var direction = __WEBPACK_IMPORTED_MODULE_0_app_direction__["a" /* default */].determineDirection(a, b);
@@ -2153,6 +2330,13 @@ var Wall = /** @class */ (function () {
     return Wall;
 }());
 
+/**
+ * This model class is a representation of a maze based on a list of walls. Each wall has a start point and end point.
+ * The walls should not intersect and cross; they should only intersect end-to-end with T- and L-shaped intersections.
+ * A 4-way intersection should always consist of three walls. T-shaped intersections should be split into 3 parts if the
+ * part of the intersection analogous to the top of the letter T is not in the favored direction
+ * @author adashrod@gmail.com
+ */
 var LinearWallModel = /** @class */ (function () {
     function LinearWallModel(width, height, favorEwWalls) {
         this.walls = [];
@@ -2302,6 +2486,14 @@ var Maze = /** @class */ (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__ = __webpack_require__("./src/app/common/ordered-pair.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__ = __webpack_require__("./src/app/misc/big-util.ts");
+
+
+/**
+ * A path is a set of points. The implication is that there is a line from point 0 to point 1, point 1 to
+ * point 2, ..., point n - 1 to point n, and (if isClosed == true) point n to point 0
+ */
 var Path = /** @class */ (function () {
     /**
      * if passed two arguments, creates an unclosed path from the first to the second
@@ -2312,12 +2504,23 @@ var Path = /** @class */ (function () {
     function Path(from, to) {
         this.points = [];
         this.isClosed = true;
+        this.cachedWidth = null;
+        this.cachedHeight = null;
         if (typeof from !== "undefined" && typeof to !== "undefined") {
             this.points.push(from);
             this.points.push(to);
             this.isClosed = false;
         }
     }
+    Path.copy = function (path) {
+        var pathCopy = new Path();
+        for (var _i = 0, _a = path.points; _i < _a.length; _i++) {
+            var point = _a[_i];
+            pathCopy.addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](point.x, point.y));
+        }
+        pathCopy.setClosed(path.isClosed);
+        return pathCopy;
+    };
     Path.prototype.addPoint = function (point) {
         this.points.push(point);
         return this;
@@ -2326,6 +2529,52 @@ var Path = /** @class */ (function () {
         this.isClosed = closed;
         return this;
     };
+    Object.defineProperty(Path.prototype, "width", {
+        get: function () {
+            if (this.cachedWidth !== null) {
+                return this.cachedWidth;
+            }
+            var minimum = null, maximum = null;
+            for (var _i = 0, _a = this.points; _i < _a.length; _i++) {
+                var point = _a[_i];
+                if (minimum === null || point.x.lt(minimum)) {
+                    minimum = point.x;
+                }
+                if (maximum === null || point.x.gt(maximum)) {
+                    maximum = point.x;
+                }
+            }
+            if (maximum === null || minimum === null) {
+                return __WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */];
+            }
+            return maximum.sub(minimum);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Path.prototype, "height", {
+        get: function () {
+            if (this.cachedHeight !== null) {
+                return this.cachedHeight;
+            }
+            var minimum = null, maximum = null;
+            for (var _i = 0, _a = this.points; _i < _a.length; _i++) {
+                var point = _a[_i];
+                if (minimum === null || point.y.lt(minimum)) {
+                    minimum = point.y;
+                }
+                if (maximum === null || point.y.gt(maximum)) {
+                    maximum = point.y;
+                }
+            }
+            if (maximum === null || minimum === null) {
+                return __WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */];
+            }
+            return maximum.sub(minimum);
+        },
+        enumerable: true,
+        configurable: true
+    });
     Path.prototype.translate = function (delta) {
         for (var _i = 0, _a = this.points; _i < _a.length; _i++) {
             var point = _a[_i];
@@ -2357,11 +2606,24 @@ var Path = /** @class */ (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Wall; });
+/**
+ * Similar to a {@link Maze}, this model is a grid-based representation of a maze. The difference is that this has grid
+ * spaces for both path space and walls. Each space that represents part of a wall has information about whether it is
+ * one or more ends of a wall or part of the middle.
+ * @author adashrod@gmail.com
+ */
 var RectangularWallModel = /** @class */ (function () {
     function RectangularWallModel(width, height) {
         this.walls = [];
+        this.isWall = [];
         this.width = width;
         this.height = height;
+        for (var y = 0; y < height; y++) {
+            this.isWall.push([]);
+            for (var x = 0; x < width; x++) {
+                this.isWall[y].push(false);
+            }
+        }
     }
     RectangularWallModel.prototype.addWall = function (wall) {
         this.walls.push(wall);
@@ -2394,6 +2656,9 @@ var Wall = /** @class */ (function () {
 
 
 
+/**
+ * A shape is a collection of paths. It can have one or many paths that are each not connected to each other.
+ */
 var Shape = /** @class */ (function () {
     /**
      * if passed one argument, creates a new shape with that one path
@@ -2621,6 +2886,57 @@ var SheetWallModel = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/models/single-sheet-model.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_app_models_shape__ = __webpack_require__("./src/app/models/shape.ts");
+
+var SingleSheetModel = /** @class */ (function () {
+    function SingleSheetModel() {
+        this.holes = new __WEBPACK_IMPORTED_MODULE_0_app_models_shape__["a" /* default */]();
+        this.floorOutline = new __WEBPACK_IMPORTED_MODULE_0_app_models_shape__["a" /* default */]();
+        this.outOfBounds = false;
+    }
+    SingleSheetModel.prototype.addHole = function (path) {
+        this.holes.addPath(path);
+        return this;
+    };
+    Object.defineProperty(SingleSheetModel.prototype, "maxHorizontalDisplacement", {
+        get: function () {
+            var max = this.floorOutline.maxHorizontalDisplacement;
+            for (var _i = 0, _a = [this.holes, this.floorOutline]; _i < _a.length; _i++) {
+                var shape = _a[_i];
+                if (shape.maxHorizontalDisplacement.gt(max)) {
+                    max = shape.maxHorizontalDisplacement;
+                }
+            }
+            return max;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SingleSheetModel.prototype, "maxVerticalDisplacement", {
+        get: function () {
+            var max = this.floorOutline.maxVerticalDisplacement;
+            for (var _i = 0, _a = [this.holes, this.floorOutline]; _i < _a.length; _i++) {
+                var shape = _a[_i];
+                if (shape.maxVerticalDisplacement.gt(max)) {
+                    max = shape.maxVerticalDisplacement;
+                }
+            }
+            return max;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return SingleSheetModel;
+}());
+/* harmony default export */ __webpack_exports__["a"] = (SingleSheetModel);
+
+
+/***/ }),
+
 /***/ "./src/app/models/space.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2733,6 +3049,11 @@ var VectorNumber = /** @class */ (function () {
         this.height = height;
         this.position = position;
     }
+    /**
+     * Given a digit character, returns a {@link Shape} with points describing the shape of that numeral
+     * @param c a digit char
+     * @return a shape that looks like the numeral
+     */
     VectorNumber.characterToShape = function (c) {
         var shape = VectorNumber.charMap[c];
         if (typeof shape !== "undefined") {
@@ -2896,6 +3217,26 @@ function buildCharMap() {
 }
 var CHARACTER_WIDTH = 6;
 var CHARACTER_HEIGHT = 10;
+
+
+/***/ }),
+
+/***/ "./src/app/print-mode.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var PrintMode = /** @class */ (function () {
+    function PrintMode(name) {
+        this.name = name;
+    }
+    PrintMode.values = function () {
+        return [PrintMode.FLOOR_AND_WALL, PrintMode.SINGLE_SHEET];
+    };
+    PrintMode.FLOOR_AND_WALL = new PrintMode("Floor and Wall");
+    PrintMode.SINGLE_SHEET = new PrintMode("Single Sheet");
+    return PrintMode;
+}());
+/* harmony default export */ __webpack_exports__["a"] = (PrintMode);
 
 
 /***/ }),
@@ -3072,7 +3413,7 @@ module.exports = ""
 /***/ "./src/app/welcome/welcome.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div>\n    <p>Welcome to the Laser-Cut Maze Designer, by Aaron Rodriguez</p>\n    <p>With this tool and a laser cutter such as a <a href=\"https://glowforge.us/IAVRVMWC\" target=\"_blank\">Glowforge</a> or an\n        <a href=\"http://epiloglaser.com\" target=\"_blank\">Epilog</a>, you can create your own wooden toy maze. You can then assemble\n        it and play with it by rolling around a small marble through the hallways.\n    </p>\n</div>\n<div>\n    <iframe width=\"480\" height=\"270\" src=\"https://www.youtube.com/embed/4fWBe2R-6Nw\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen=\"allowfullscreen\"></iframe>\n</div>\n<div>\n    <p>Get started <a routerLink=\"/LaserCutMazes/designer\">here</a></p>\n</div>\n"
+module.exports = "<div>\n    <p>Welcome to the Laser-Cut Maze Designer, by Aaron Rodriguez</p>\n    <p>With this tool and a laser cutter such as a <a href=\"https://glowforge.us/IAVRVMWC\" target=\"_blank\">Glowforge</a> or an\n        <a href=\"http://epiloglaser.com\" target=\"_blank\">Epilog</a>, you can create your own wooden toy maze. You can then assemble\n        it and play with it by rolling around a small marble through the hallways.\n    </p>\n</div>\n<div>\n    <iframe width=\"480\" height=\"270\" src=\"https://www.youtube.com/embed/4fWBe2R-6Nw\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen=\"allowfullscreen\"></iframe>\n    <img src=\"LaserCutMazes/assets/singleSheetPieces.png\"/>\n</div>\n<div>\n    <p>Get started <a routerLink=\"/LaserCutMazes/designer\">here</a></p>\n</div>\n"
 
 /***/ }),
 
