@@ -43,21 +43,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 
 var AboutComponent = /** @class */ (function () {
+    // eslint-disable-next-line @typescript-eslint/no-extraneous-class
     function AboutComponent() {
     }
-    AboutComponent.prototype.ngOnInit = function () { };
     AboutComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: "app-about",
             template: __webpack_require__("./src/app/about/about.component.html"),
             styles: [__webpack_require__("./src/app/about/about.component.css")]
-        }),
-        __metadata("design:paramtypes", [])
+        })
+        // eslint-disable-next-line @typescript-eslint/no-extraneous-class
     ], AboutComponent);
     return AboutComponent;
 }());
@@ -74,10 +71,15 @@ var AboutComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_common_ordered_pair__ = __webpack_require__("./src/app/common/ordered-pair.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_direction__ = __webpack_require__("./src/app/direction.ts");
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -103,7 +105,7 @@ var DepthFirstSearchAlgorithm = /** @class */ (function (_super) {
         get: function () {
             return "Depth-First Search";
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     DepthFirstSearchAlgorithm.prototype.buildPaths = function (maze) {
@@ -156,10 +158,15 @@ var DepthFirstSearchAlgorithm = /** @class */ (function (_super) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_app_algorithms_maze_generator__ = __webpack_require__("./src/app/algorithms/maze-generator.ts");
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -173,6 +180,7 @@ var EmptyAlgorithm = /** @class */ (function (_super) {
         _this.name = "Do-It-Yourself";
         return _this;
     }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     EmptyAlgorithm.prototype.buildPaths = function (maze) { };
     return EmptyAlgorithm;
 }(__WEBPACK_IMPORTED_MODULE_0_app_algorithms_maze_generator__["a" /* default */]));
@@ -189,10 +197,15 @@ var EmptyAlgorithm = /** @class */ (function (_super) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_common_ordered_pair__ = __webpack_require__("./src/app/common/ordered-pair.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_direction__ = __webpack_require__("./src/app/direction.ts");
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -201,9 +214,6 @@ var __extends = (this && this.__extends) || (function () {
 
 
 
-/**
- * Simple unidirectional tree for implementing a disjoint set
- */
 var Tree = /** @class */ (function () {
     function Tree() {
         this.parent = this;
@@ -212,7 +222,7 @@ var Tree = /** @class */ (function () {
         get: function () {
             return this.parent === this ? this.parent : this.parent.root;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Tree.prototype.isConnectedTo = function (otherTree) {
@@ -250,7 +260,7 @@ var KruskalsAlgorithm = /** @class */ (function (_super) {
         get: function () {
             return "Kruskal's";
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     KruskalsAlgorithm.prototype.buildPaths = function (maze) {
@@ -321,7 +331,7 @@ var MazeGenerator = /** @class */ (function () {
             this._seed = seed.toString();
             this.rng = Object(__WEBPACK_IMPORTED_MODULE_0_random_seed__["create"])(this._seed);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return MazeGenerator;
@@ -339,10 +349,15 @@ var MazeGenerator = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_common_ordered_pair__ = __webpack_require__("./src/app/common/ordered-pair.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_direction__ = __webpack_require__("./src/app/direction.ts");
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -372,7 +387,7 @@ var PrimsAlgorithm = /** @class */ (function (_super) {
         get: function () {
             return "Prim's";
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     PrimsAlgorithm.prototype.buildPaths = function (maze) {
@@ -416,9 +431,9 @@ var PrimsAlgorithm = /** @class */ (function (_super) {
     };
     PrimsAlgorithm.prototype.isUnexplored = function (x, y) {
         var space = this.maze.grid[y][x];
-        return !space.isOpen(__WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].NORTH) && !space.isOpen(__WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].EAST) &&
-            !space.isOpen(__WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].SOUTH) && !space.isOpen(__WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].WEST) &&
-            !this.exploringNext.has(new __WEBPACK_IMPORTED_MODULE_1_app_common_ordered_pair__["a" /* default */](x, y).toString());
+        var wallsClosed = !space.isOpen(__WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].NORTH) && !space.isOpen(__WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].EAST) &&
+            !space.isOpen(__WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].SOUTH) && !space.isOpen(__WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].WEST);
+        return wallsClosed && !this.exploringNext.has(new __WEBPACK_IMPORTED_MODULE_1_app_common_ordered_pair__["a" /* default */](x, y).toString());
     };
     return PrimsAlgorithm;
 }(__WEBPACK_IMPORTED_MODULE_0_app_algorithms_maze_generator__["a" /* default */]));
@@ -462,14 +477,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var AppComponent = /** @class */ (function () {
     function AppComponent(router) {
         this.router = router;
+        var w = window;
         this.router.events.subscribe(function (event) {
-            if (event instanceof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* NavigationEnd */] && typeof window.ga === "function") {
-                window.ga("set", "page", event.urlAfterRedirects);
-                window.ga("send", "pageview");
+            if (event instanceof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* NavigationEnd */] && typeof w.ga === "function") {
+                w.ga("set", "page", event.urlAfterRedirects);
+                w.ga("send", "pageview");
             }
         });
     }
-    AppComponent.prototype.ngOnInit = function () { };
     AppComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: "app-root",
@@ -494,14 +509,14 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/platform-browser.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_app_maze_builder_maze_builder_component__ = __webpack_require__("./src/app/maze-builder/maze-builder.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_app_about_about_component__ = __webpack_require__("./src/app/about/about.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_app_app_component__ = __webpack_require__("./src/app/app.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_app_help_help_component__ = __webpack_require__("./src/app/help/help.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_app_help_modal_help_modal_component__ = __webpack_require__("./src/app/help-modal/help-modal.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_app_welcome_welcome_component__ = __webpack_require__("./src/app/welcome/welcome.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_app_lightbox_thumbnail_lightbox_thumbnail_component__ = __webpack_require__("./src/app/lightbox-thumbnail/lightbox-thumbnail.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_app_about_about_component__ = __webpack_require__("./src/app/about/about.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_app_track_click_directive__ = __webpack_require__("./src/app/track-click.directive.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_app_help_modal_help_modal_component__ = __webpack_require__("./src/app/help-modal/help-modal.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_app_help_help_component__ = __webpack_require__("./src/app/help/help.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_app_lightbox_thumbnail_lightbox_thumbnail_component__ = __webpack_require__("./src/app/lightbox-thumbnail/lightbox-thumbnail.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_app_maze_builder_maze_builder_component__ = __webpack_require__("./src/app/maze-builder/maze-builder.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_app_track_click_directive__ = __webpack_require__("./src/app/track-click.directive.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_app_welcome_welcome_component__ = __webpack_require__("./src/app/welcome/welcome.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -522,35 +537,36 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 var appRoutes = [{
         path: "LaserCutMazes/welcome",
-        component: __WEBPACK_IMPORTED_MODULE_8_app_welcome_welcome_component__["a" /* WelcomeComponent */]
+        component: __WEBPACK_IMPORTED_MODULE_11_app_welcome_welcome_component__["a" /* WelcomeComponent */]
     }, {
         path: "LaserCutMazes/designer",
-        component: __WEBPACK_IMPORTED_MODULE_4_app_maze_builder_maze_builder_component__["a" /* MazeBuilderComponent */]
+        component: __WEBPACK_IMPORTED_MODULE_9_app_maze_builder_maze_builder_component__["a" /* MazeBuilderComponent */]
     }, {
         path: "LaserCutMazes/help",
-        component: __WEBPACK_IMPORTED_MODULE_6_app_help_help_component__["a" /* HelpComponent */]
+        component: __WEBPACK_IMPORTED_MODULE_7_app_help_help_component__["a" /* HelpComponent */]
     }, {
         path: "LaserCutMazes/about",
-        component: __WEBPACK_IMPORTED_MODULE_10_app_about_about_component__["a" /* AboutComponent */]
+        component: __WEBPACK_IMPORTED_MODULE_4_app_about_about_component__["a" /* AboutComponent */]
     }, {
         path: "LaserCutMazes",
         redirectTo: "LaserCutMazes/welcome",
         pathMatch: "prefix"
     }];
 var AppModule = /** @class */ (function () {
+    // eslint-disable-next-line @typescript-eslint/no-extraneous-class
     function AppModule() {
     }
     AppModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["I" /* NgModule */])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_10_app_about_about_component__["a" /* AboutComponent */],
+                __WEBPACK_IMPORTED_MODULE_4_app_about_about_component__["a" /* AboutComponent */],
                 __WEBPACK_IMPORTED_MODULE_5_app_app_component__["a" /* AppComponent */],
-                __WEBPACK_IMPORTED_MODULE_6_app_help_help_component__["a" /* HelpComponent */],
-                __WEBPACK_IMPORTED_MODULE_7_app_help_modal_help_modal_component__["a" /* HelpModalComponent */],
-                __WEBPACK_IMPORTED_MODULE_9_app_lightbox_thumbnail_lightbox_thumbnail_component__["a" /* LightboxThumbnailComponent */],
-                __WEBPACK_IMPORTED_MODULE_4_app_maze_builder_maze_builder_component__["a" /* MazeBuilderComponent */],
-                __WEBPACK_IMPORTED_MODULE_8_app_welcome_welcome_component__["a" /* WelcomeComponent */],
-                __WEBPACK_IMPORTED_MODULE_11_app_track_click_directive__["a" /* TrackClickDirective */]
+                __WEBPACK_IMPORTED_MODULE_7_app_help_help_component__["a" /* HelpComponent */],
+                __WEBPACK_IMPORTED_MODULE_6_app_help_modal_help_modal_component__["a" /* HelpModalComponent */],
+                __WEBPACK_IMPORTED_MODULE_8_app_lightbox_thumbnail_lightbox_thumbnail_component__["a" /* LightboxThumbnailComponent */],
+                __WEBPACK_IMPORTED_MODULE_9_app_maze_builder_maze_builder_component__["a" /* MazeBuilderComponent */],
+                __WEBPACK_IMPORTED_MODULE_11_app_welcome_welcome_component__["a" /* WelcomeComponent */],
+                __WEBPACK_IMPORTED_MODULE_10_app_track_click_directive__["a" /* TrackClickDirective */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["a" /* BrowserModule */],
@@ -560,6 +576,7 @@ var AppModule = /** @class */ (function () {
             providers: [],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_5_app_app_component__["a" /* AppComponent */]]
         })
+        // eslint-disable-next-line @typescript-eslint/no-extraneous-class
     ], AppModule);
     return AppModule;
 }());
@@ -591,7 +608,8 @@ var OrderedPair = /** @class */ (function () {
         return this.x === aPair.x && this.y === aPair.y;
     };
     OrderedPair.prototype.toString = function () {
-        return "OrderedPair(" + this.x.toString() + ", " + this.y.toString() + ")";
+        var _a, _b;
+        return "OrderedPair(".concat((_a = this.x) === null || _a === void 0 ? void 0 : _a.toString(), ", ").concat((_b = this.y) === null || _b === void 0 ? void 0 : _b.toString(), ")");
     };
     return OrderedPair;
 }());
@@ -655,7 +673,7 @@ var Direction = /** @class */ (function () {
         if (yComp > 0) {
             return Direction.NORTH;
         }
-        throw new Error("Indeterminate: the 2 OrderedPairs couldn't be compared: " + from.toString() + ", " + to.toString());
+        throw new Error("Indeterminate: the 2 OrderedPairs couldn't be compared: ".concat(from.toString(), ", ").concat(to.toString()));
     };
     Object.defineProperty(Direction.prototype, "opposite", {
         get: function () {
@@ -673,7 +691,7 @@ var Direction = /** @class */ (function () {
             }
             throw new Error("invalid direction");
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Direction.prototype.toString = function () {
@@ -695,8 +713,8 @@ var Direction = /** @class */ (function () {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__ = __webpack_require__("./src/app/common/ordered-pair.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_models_linear_wall_model__ = __webpack_require__("./src/app/models/linear-wall-model.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_direction__ = __webpack_require__("./src/app/direction.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_direction__ = __webpack_require__("./src/app/direction.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_models_linear_wall_model__ = __webpack_require__("./src/app/models/linear-wall-model.ts");
 
 
 
@@ -713,34 +731,34 @@ var LinearWallModelGenerator = /** @class */ (function () {
         var height = this.maze.numRows;
         var lastCol = width - 1;
         var lastRow = height - 1;
-        var linearWallModel = new __WEBPACK_IMPORTED_MODULE_1_app_models_linear_wall_model__["b" /* default */](width, height, this.favorEwWalls);
+        var linearWallModel = new __WEBPACK_IMPORTED_MODULE_2_app_models_linear_wall_model__["b" /* default */](width, height, this.favorEwWalls);
         if (this.favorEwWalls) {
             // make north walls of the rows
             for (var y = 0; y < height; y++) {
-                this.makeWallsForLane(linearWallModel, y, width, false, __WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].NORTH, null, false);
+                this.makeWallsForLane(linearWallModel, y, width, false, __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].NORTH, null, false);
             }
             // south wall of row
-            this.makeWallsForLane(linearWallModel, lastRow, width, false, __WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].SOUTH, null, true);
+            this.makeWallsForLane(linearWallModel, lastRow, width, false, __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].SOUTH, null, true);
             // make west walls of columns
             for (var x = 0; x < width; x++) {
-                this.makeWallsForLane(linearWallModel, x, height, true, __WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].WEST, __WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].SOUTH, false);
+                this.makeWallsForLane(linearWallModel, x, height, true, __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].WEST, __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].SOUTH, false);
             }
             // east wall of column
-            this.makeWallsForLane(linearWallModel, lastCol, height, true, __WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].EAST, __WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].SOUTH, true);
+            this.makeWallsForLane(linearWallModel, lastCol, height, true, __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].EAST, __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].SOUTH, true);
         }
         else {
             // make west walls of columns
             for (var x = 0; x < width; x++) {
-                this.makeWallsForLane(linearWallModel, x, height, true, __WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].WEST, null, false);
+                this.makeWallsForLane(linearWallModel, x, height, true, __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].WEST, null, false);
             }
             // east wall of column
-            this.makeWallsForLane(linearWallModel, lastCol, height, true, __WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].EAST, null, true);
+            this.makeWallsForLane(linearWallModel, lastCol, height, true, __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].EAST, null, true);
             // make north walls of the rows
             for (var y = 0; y < height; y++) {
-                this.makeWallsForLane(linearWallModel, y, width, false, __WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].NORTH, __WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].EAST, false);
+                this.makeWallsForLane(linearWallModel, y, width, false, __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].NORTH, __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].EAST, false);
             }
             // south wall of row
-            this.makeWallsForLane(linearWallModel, lastRow, width, false, __WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].SOUTH, __WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].EAST, true);
+            this.makeWallsForLane(linearWallModel, lastRow, width, false, __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].SOUTH, __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].EAST, true);
         }
         return linearWallModel;
     };
@@ -855,7 +873,7 @@ var LinearWallModelGenerator = /** @class */ (function () {
             }
         }
         var start = new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](startX, startY), end = new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](endX, endY);
-        return new __WEBPACK_IMPORTED_MODULE_1_app_models_linear_wall_model__["a" /* Wall */](start, end);
+        return new __WEBPACK_IMPORTED_MODULE_2_app_models_linear_wall_model__["a" /* Wall */](start, end);
     };
     return LinearWallModelGenerator;
 }());
@@ -869,8 +887,8 @@ var LinearWallModelGenerator = /** @class */ (function () {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__ = __webpack_require__("./src/app/common/ordered-pair.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_models_rectangular_wall_model__ = __webpack_require__("./src/app/models/rectangular-wall-model.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_direction__ = __webpack_require__("./src/app/direction.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_direction__ = __webpack_require__("./src/app/direction.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_models_rectangular_wall_model__ = __webpack_require__("./src/app/models/rectangular-wall-model.ts");
 
 
 
@@ -892,16 +910,16 @@ var RectangularWallModelGenerator = /** @class */ (function () {
         }
     }
     RectangularWallModelGenerator.prototype.generate = function () {
-        var rectangularWallModel = new __WEBPACK_IMPORTED_MODULE_1_app_models_rectangular_wall_model__["b" /* default */](this.isWall[0].length, this.isWall.length);
+        var rectangularWallModel = new __WEBPACK_IMPORTED_MODULE_2_app_models_rectangular_wall_model__["b" /* default */](this.isWall[0].length, this.isWall.length);
         var verticalWalls = [], horizontalWalls = [];
         for (var _i = 0, _a = this.model.walls; _i < _a.length; _i++) {
             var wall = _a[_i];
-            var wallDirection = __WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].determineDirection(wall.start, wall.end);
-            if (wallDirection === __WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].NORTH || wallDirection === __WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].WEST) {
+            var wallDirection = __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].determineDirection(wall.start, wall.end);
+            if (wallDirection === __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].NORTH || wallDirection === __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].WEST) {
                 throw new Error("wall direction should only be EAST or SOUTH (start-to-end should be left-to-right or top-to-bottom): " +
                     wall.toString());
             }
-            var isVertical = wallDirection === __WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].SOUTH;
+            var isVertical = wallDirection === __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].SOUTH;
             if (isVertical) {
                 verticalWalls.push(wall);
             }
@@ -926,7 +944,7 @@ var RectangularWallModelGenerator = /** @class */ (function () {
         return rectangularWallModel;
     };
     RectangularWallModelGenerator.prototype.createWallSpacesFromLinearWalls = function (rectangularWallModel, walls, wallsAreVertical, isFirstSetOfWalls) {
-        var endDirection = wallsAreVertical ? __WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].SOUTH : __WEBPACK_IMPORTED_MODULE_2_app_direction__["a" /* default */].EAST;
+        var endDirection = wallsAreVertical ? __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].SOUTH : __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].EAST;
         for (var _i = 0, walls_1 = walls; _i < walls_1.length; _i++) {
             var wall = walls_1[_i];
             var wsx = wall.start.x * 2, wex = wall.end.x * 2, wsy = wall.start.y * 2, wey = wall.end.y * 2;
@@ -948,7 +966,7 @@ var RectangularWallModelGenerator = /** @class */ (function () {
                     }
                 }
             }
-            var rectWall = new __WEBPACK_IMPORTED_MODULE_1_app_models_rectangular_wall_model__["a" /* Wall */](new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](wsx, wsy), new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](wex, wey), endDirection);
+            var rectWall = new __WEBPACK_IMPORTED_MODULE_2_app_models_rectangular_wall_model__["a" /* Wall */](new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](wsx, wsy), new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](wex, wey), endDirection);
             rectangularWallModel.addWall(rectWall);
             this.fillOutWallSpaces(wallsAreVertical, wsx, wsy, wex, wey);
         }
@@ -977,13 +995,13 @@ var RectangularWallModelGenerator = /** @class */ (function () {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__ = __webpack_require__("./src/app/common/ordered-pair.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_factories_sheet_wall_tiling_optimizer__ = __webpack_require__("./src/app/factories/sheet-wall-tiling-optimizer.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__ = __webpack_require__("./src/app/misc/big-util.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_app_models_path__ = __webpack_require__("./src/app/models/path.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_app_models_shape__ = __webpack_require__("./src/app/models/shape.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_app_models_sheet_wall_model__ = __webpack_require__("./src/app/models/sheet-wall-model.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_app_models_vector_number__ = __webpack_require__("./src/app/models/vector-number.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_app_direction__ = __webpack_require__("./src/app/direction.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_direction__ = __webpack_require__("./src/app/direction.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_factories_sheet_wall_tiling_optimizer__ = __webpack_require__("./src/app/factories/sheet-wall-tiling-optimizer.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_app_misc_big_util__ = __webpack_require__("./src/app/misc/big-util.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_app_models_path__ = __webpack_require__("./src/app/models/path.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_app_models_shape__ = __webpack_require__("./src/app/models/shape.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_app_models_sheet_wall_model__ = __webpack_require__("./src/app/models/sheet-wall-model.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_app_models_vector_number__ = __webpack_require__("./src/app/models/vector-number.ts");
 
 
 
@@ -1035,16 +1053,16 @@ var SheetWallModelGenerator = /** @class */ (function () {
                 return dirCmp;
             }
             // p1Dir === p2Dir
-            if (p1Dir === __WEBPACK_IMPORTED_MODULE_7_app_direction__["a" /* default */].NORTH) {
+            if (p1Dir === __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].NORTH) {
                 return p1.points[0].x.cmp(p2.points[0].x);
             }
-            else if (p1Dir === __WEBPACK_IMPORTED_MODULE_7_app_direction__["a" /* default */].EAST) {
+            else if (p1Dir === __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].EAST) {
                 return p1.points[0].y.cmp(p2.points[0].y);
             }
-            else if (p1Dir === __WEBPACK_IMPORTED_MODULE_7_app_direction__["a" /* default */].SOUTH) {
+            else if (p1Dir === __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].SOUTH) {
                 return p2.points[0].x.cmp(p1.points[0].x);
             }
-            else if (p1Dir === __WEBPACK_IMPORTED_MODULE_7_app_direction__["a" /* default */].WEST) {
+            else if (p1Dir === __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].WEST) {
                 return p2.points[0].y.cmp(p1.points[0].y);
             }
             else {
@@ -1054,7 +1072,7 @@ var SheetWallModelGenerator = /** @class */ (function () {
         this.model = model;
     }
     SheetWallModelGenerator.prototype.generate = function () {
-        var sheetWallModel = new __WEBPACK_IMPORTED_MODULE_5_app_models_sheet_wall_model__["a" /* default */]();
+        var sheetWallModel = new __WEBPACK_IMPORTED_MODULE_6_app_models_sheet_wall_model__["a" /* default */]();
         // for now, all walls and the floor will be positioned at (0,0). They'll be translated and tiled on the
         // print sheet later
         var sortedWalls = this.model.walls.slice(0);
@@ -1062,23 +1080,23 @@ var SheetWallModelGenerator = /** @class */ (function () {
         for (var _i = 0, sortedWalls_1 = sortedWalls; _i < sortedWalls_1.length; _i++) {
             var wall = sortedWalls_1[_i];
             var wallLength = this.createNotchesForWall(wall, sheetWallModel);
-            var wallPath = new __WEBPACK_IMPORTED_MODULE_3_app_models_path__["a" /* default */]()
-                .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["b" /* ZERO */], __WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["b" /* ZERO */]))
-                .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](wallLength, __WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["b" /* ZERO */]))
+            var wallPath = new __WEBPACK_IMPORTED_MODULE_4_app_models_path__["a" /* default */]()
+                .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](__WEBPACK_IMPORTED_MODULE_3_app_misc_big_util__["b" /* ZERO */], __WEBPACK_IMPORTED_MODULE_3_app_misc_big_util__["b" /* ZERO */]))
+                .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](wallLength, __WEBPACK_IMPORTED_MODULE_3_app_misc_big_util__["b" /* ZERO */]))
                 .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](wallLength, this.wallHeight.add(this.materialThickness)))
                 .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](wallLength.sub(this.notchHeight), this.wallHeight.add(this.materialThickness)))
                 .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](wallLength.sub(this.notchHeight), this.wallHeight))
                 .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](this.notchHeight, this.wallHeight))
                 .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](this.notchHeight, this.wallHeight.add(this.materialThickness)))
-                .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["b" /* ZERO */], this.wallHeight.add(this.materialThickness)));
-            var wallShape = new __WEBPACK_IMPORTED_MODULE_4_app_models_shape__["a" /* default */](wallPath);
+                .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](__WEBPACK_IMPORTED_MODULE_3_app_misc_big_util__["b" /* ZERO */], this.wallHeight.add(this.materialThickness)));
+            var wallShape = new __WEBPACK_IMPORTED_MODULE_5_app_models_shape__["a" /* default */](wallPath);
             sheetWallModel.addShape(wallShape);
             var wallTypeLabel = this.findWallTypeLabel(wallLength);
-            var vnHeight = this.wallHeight.mul(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["a" /* HALF */]), vnWidth = vnHeight.mul(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["a" /* HALF */]).mul(this.numDigits(wallTypeLabel));
-            sheetWallModel.wallLabels.set(wallShape, new __WEBPACK_IMPORTED_MODULE_6_app_models_vector_number__["c" /* default */](wallTypeLabel, Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["c" /* min */])(vnWidth, wallLength), vnHeight, new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["b" /* ZERO */], __WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["b" /* ZERO */]))); // translate in optimizer
+            var vnHeight = this.wallHeight.mul(__WEBPACK_IMPORTED_MODULE_3_app_misc_big_util__["a" /* HALF */]), vnWidth = vnHeight.mul(__WEBPACK_IMPORTED_MODULE_3_app_misc_big_util__["a" /* HALF */]).mul(this.numDigits(wallTypeLabel));
+            sheetWallModel.wallLabels.set(wallShape, new __WEBPACK_IMPORTED_MODULE_7_app_models_vector_number__["c" /* default */](wallTypeLabel, Object(__WEBPACK_IMPORTED_MODULE_3_app_misc_big_util__["c" /* min */])(vnWidth, wallLength), vnHeight, new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](__WEBPACK_IMPORTED_MODULE_3_app_misc_big_util__["b" /* ZERO */], __WEBPACK_IMPORTED_MODULE_3_app_misc_big_util__["b" /* ZERO */]))); // translate in optimizer
         }
         this.createOutline(sheetWallModel);
-        new __WEBPACK_IMPORTED_MODULE_1_app_factories_sheet_wall_tiling_optimizer__["a" /* default */](sheetWallModel, this.separationSpace, this.maxWidth, this.maxHeight, this.wallHeight).optimize();
+        new __WEBPACK_IMPORTED_MODULE_2_app_factories_sheet_wall_tiling_optimizer__["a" /* default */](sheetWallModel, this.separationSpace, this.maxWidth, this.maxHeight, this.wallHeight).optimize();
         return sheetWallModel;
     };
     /**
@@ -1094,17 +1112,17 @@ var SheetWallModelGenerator = /** @class */ (function () {
     };
     SheetWallModelGenerator.prototype.createNotchesForWall = function (wall, sheetWallModel) {
         // notches in the floor for the wall tabs to fit into
-        var firstNotch = new __WEBPACK_IMPORTED_MODULE_3_app_models_path__["a" /* default */](), secondNotch = new __WEBPACK_IMPORTED_MODULE_3_app_models_path__["a" /* default */]();
+        var firstNotch = new __WEBPACK_IMPORTED_MODULE_4_app_models_path__["a" /* default */](), secondNotch = new __WEBPACK_IMPORTED_MODULE_4_app_models_path__["a" /* default */]();
         var wallLength;
         var vectorNumber;
-        if (wall.wallDirection === __WEBPACK_IMPORTED_MODULE_7_app_direction__["a" /* default */].EAST) {
+        if (wall.wallDirection === __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].EAST) {
             wallLength = this.calcDisplacement(wall.end.x + 1).sub(this.calcDisplacement(wall.start.x));
             var wallTypeLabel = this.findWallTypeLabel(wallLength);
             var startDisplacementX = this.calcDisplacement(wall.start.x), endDisplacementX = this.calcDisplacement(wall.end.x + 1).sub(this.notchHeight), displacementY = this.calcDisplacement(wall.start.y);
             var spaceBetweenNotches = endDisplacementX.sub(startDisplacementX).sub(this.notchHeight);
-            var vnWidth = this.materialThickness.mul(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["a" /* HALF */]).mul(this.numDigits(wallTypeLabel));
-            vnWidth = Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["c" /* min */])(vnWidth, spaceBetweenNotches);
-            vectorNumber = new __WEBPACK_IMPORTED_MODULE_6_app_models_vector_number__["c" /* default */](wallTypeLabel, vnWidth, this.materialThickness, new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](startDisplacementX.add(this.notchHeight).add(spaceBetweenNotches.mul(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["a" /* HALF */])).sub(vnWidth.mul(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["a" /* HALF */])), displacementY));
+            var vnWidth = this.materialThickness.mul(__WEBPACK_IMPORTED_MODULE_3_app_misc_big_util__["a" /* HALF */]).mul(this.numDigits(wallTypeLabel));
+            vnWidth = Object(__WEBPACK_IMPORTED_MODULE_3_app_misc_big_util__["c" /* min */])(vnWidth, spaceBetweenNotches);
+            vectorNumber = new __WEBPACK_IMPORTED_MODULE_7_app_models_vector_number__["c" /* default */](wallTypeLabel, vnWidth, this.materialThickness, new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](startDisplacementX.add(this.notchHeight).add(spaceBetweenNotches.mul(__WEBPACK_IMPORTED_MODULE_3_app_misc_big_util__["a" /* HALF */])).sub(vnWidth.mul(__WEBPACK_IMPORTED_MODULE_3_app_misc_big_util__["a" /* HALF */])), displacementY));
             sheetWallModel.floorNumbers.push(vectorNumber);
             firstNotch.addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](startDisplacementX, displacementY))
                 .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](startDisplacementX.add(this.notchHeight), displacementY))
@@ -1120,9 +1138,9 @@ var SheetWallModelGenerator = /** @class */ (function () {
             var wallTypeLabel = this.findWallTypeLabel(wallLength);
             var startDisplacementY = this.calcDisplacement(wall.start.y), endDisplacementY = this.calcDisplacement(wall.end.y + 1).sub(this.notchHeight), displacementX = this.calcDisplacement(wall.start.x);
             var spaceBetweenNotches = endDisplacementY.sub(startDisplacementY).sub(this.notchHeight);
-            var vnWidth = this.materialThickness.mul(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["a" /* HALF */]).mul(this.numDigits(wallTypeLabel));
-            vnWidth = Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["c" /* min */])(vnWidth, this.materialThickness);
-            vectorNumber = new __WEBPACK_IMPORTED_MODULE_6_app_models_vector_number__["c" /* default */](wallTypeLabel, vnWidth, this.materialThickness, new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](displacementX.add(this.materialThickness.mul(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["a" /* HALF */])).sub(vnWidth.mul(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["a" /* HALF */])), startDisplacementY.add(this.notchHeight).add(spaceBetweenNotches.mul(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["a" /* HALF */])).sub(this.materialThickness.mul(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["a" /* HALF */]))));
+            var vnWidth = this.materialThickness.mul(__WEBPACK_IMPORTED_MODULE_3_app_misc_big_util__["a" /* HALF */]).mul(this.numDigits(wallTypeLabel));
+            vnWidth = Object(__WEBPACK_IMPORTED_MODULE_3_app_misc_big_util__["c" /* min */])(vnWidth, this.materialThickness);
+            vectorNumber = new __WEBPACK_IMPORTED_MODULE_7_app_models_vector_number__["c" /* default */](wallTypeLabel, vnWidth, this.materialThickness, new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](displacementX.add(this.materialThickness.mul(__WEBPACK_IMPORTED_MODULE_3_app_misc_big_util__["a" /* HALF */])).sub(vnWidth.mul(__WEBPACK_IMPORTED_MODULE_3_app_misc_big_util__["a" /* HALF */])), startDisplacementY.add(this.notchHeight).add(spaceBetweenNotches.mul(__WEBPACK_IMPORTED_MODULE_3_app_misc_big_util__["a" /* HALF */])).sub(this.materialThickness.mul(__WEBPACK_IMPORTED_MODULE_3_app_misc_big_util__["a" /* HALF */]))));
             sheetWallModel.floorNumbers.push(vectorNumber);
             firstNotch.addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](displacementX, startDisplacementY))
                 .addPoint(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](displacementX.add(this.materialThickness), startDisplacementY))
@@ -1148,16 +1166,16 @@ var SheetWallModelGenerator = /** @class */ (function () {
     SheetWallModelGenerator.prototype.addNotchToEdgeMap = function (wallEndCapCoords, notch) {
         var lastRow = this.model.height - 1, lastCol = this.model.width - 1;
         if (wallEndCapCoords.y === 0 && wallEndCapCoords.x !== lastCol) {
-            this.notchEdgeMap.set(notch, new NotchPosInfo(__WEBPACK_IMPORTED_MODULE_7_app_direction__["a" /* default */].NORTH, wallEndCapCoords.x === 0));
+            this.notchEdgeMap.set(notch, new NotchPosInfo(__WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].NORTH, wallEndCapCoords.x === 0));
         }
         else if (wallEndCapCoords.x === lastCol && wallEndCapCoords.y !== lastRow) {
-            this.notchEdgeMap.set(notch, new NotchPosInfo(__WEBPACK_IMPORTED_MODULE_7_app_direction__["a" /* default */].EAST, wallEndCapCoords.y === 0));
+            this.notchEdgeMap.set(notch, new NotchPosInfo(__WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].EAST, wallEndCapCoords.y === 0));
         }
         else if (wallEndCapCoords.y === lastRow && wallEndCapCoords.x !== 0) {
-            this.notchEdgeMap.set(notch, new NotchPosInfo(__WEBPACK_IMPORTED_MODULE_7_app_direction__["a" /* default */].SOUTH, wallEndCapCoords.x === lastCol));
+            this.notchEdgeMap.set(notch, new NotchPosInfo(__WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].SOUTH, wallEndCapCoords.x === lastCol));
         }
         else if (wallEndCapCoords.x === 0 && wallEndCapCoords.y !== 0) {
-            this.notchEdgeMap.set(notch, new NotchPosInfo(__WEBPACK_IMPORTED_MODULE_7_app_direction__["a" /* default */].WEST, wallEndCapCoords.y === lastRow));
+            this.notchEdgeMap.set(notch, new NotchPosInfo(__WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].WEST, wallEndCapCoords.y === lastRow));
         }
     };
     /**
@@ -1181,7 +1199,7 @@ var SheetWallModelGenerator = /** @class */ (function () {
                 var points = this.findNotchConnectionPoints(notchInfo, notch, nextNotch, false);
                 var firstPoint = points.firstPoint, secondPoint = points.secondPoint;
                 if (!firstPoint.equals(secondPoint)) {
-                    sheetWallModel.floorOutline.addPath(new __WEBPACK_IMPORTED_MODULE_3_app_models_path__["a" /* default */](firstPoint, secondPoint).setClosed(false));
+                    sheetWallModel.floorOutline.addPath(new __WEBPACK_IMPORTED_MODULE_4_app_models_path__["a" /* default */](firstPoint, secondPoint).setClosed(false));
                 }
                 else {
                     console.debug("skipping connecting floor outer path because it's length 0: " + firstPoint.toString());
@@ -1190,30 +1208,30 @@ var SheetWallModelGenerator = /** @class */ (function () {
             else {
                 // notches are on different sides and neither is a corner (unusual case of both parts of a corner of the maze being open)
                 var points = this.findNotchConnectionPoints(notchInfo, notch, nextNotch, true);
-                sheetWallModel.floorOutline.addPath(new __WEBPACK_IMPORTED_MODULE_3_app_models_path__["a" /* default */](points.firstPoint, points.cornerPoint).setClosed(false));
-                sheetWallModel.floorOutline.addPath(new __WEBPACK_IMPORTED_MODULE_3_app_models_path__["a" /* default */](points.cornerPoint, points.secondPoint).setClosed(false));
+                sheetWallModel.floorOutline.addPath(new __WEBPACK_IMPORTED_MODULE_4_app_models_path__["a" /* default */](points.firstPoint, points.cornerPoint).setClosed(false));
+                sheetWallModel.floorOutline.addPath(new __WEBPACK_IMPORTED_MODULE_4_app_models_path__["a" /* default */](points.cornerPoint, points.secondPoint).setClosed(false));
             }
         }
     };
     SheetWallModelGenerator.prototype.findNotchConnectionPoints = function (notchInfo, notch, nextNotch, includeCorner) {
         var nextNotchAdditive = includeCorner ? 1 : 0;
         var firstPoint, floorCornerPoint, secondPoint;
-        if (notchInfo.direction === __WEBPACK_IMPORTED_MODULE_7_app_direction__["a" /* default */].NORTH) {
+        if (notchInfo.direction === __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].NORTH) {
             firstPoint = notch.points[1];
             secondPoint = nextNotch.points[nextNotchAdditive];
             floorCornerPoint = new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](secondPoint.x, firstPoint.y);
         }
-        else if (notchInfo.direction === __WEBPACK_IMPORTED_MODULE_7_app_direction__["a" /* default */].EAST) {
+        else if (notchInfo.direction === __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].EAST) {
             firstPoint = notch.points[2];
             secondPoint = nextNotch.points[1 + nextNotchAdditive];
             floorCornerPoint = new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](firstPoint.x, secondPoint.y);
         }
-        else if (notchInfo.direction === __WEBPACK_IMPORTED_MODULE_7_app_direction__["a" /* default */].SOUTH) {
+        else if (notchInfo.direction === __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].SOUTH) {
             firstPoint = notch.points[3];
             secondPoint = nextNotch.points[2 + nextNotchAdditive];
             floorCornerPoint = new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](secondPoint.x, firstPoint.y);
         }
-        else if (notchInfo.direction === __WEBPACK_IMPORTED_MODULE_7_app_direction__["a" /* default */].WEST) {
+        else if (notchInfo.direction === __WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].WEST) {
             firstPoint = notch.points[0];
             secondPoint = nextNotch.points[3 + nextNotchAdditive % 4];
             floorCornerPoint = new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](firstPoint.x, secondPoint.y);
@@ -1224,16 +1242,14 @@ var SheetWallModelGenerator = /** @class */ (function () {
         return new NotchConnection(firstPoint, floorCornerPoint, secondPoint);
     };
     SheetWallModelGenerator.prototype.numDigits = function (number) {
-        var n = number < 0 ? -1 * number : number;
-        var exp = 1;
+        var n = Math.abs(number);
+        var count = 1;
         var powerOfTen = 10;
-        while (true) {
-            if (n < powerOfTen) {
-                return exp;
-            }
+        while (n >= powerOfTen) {
             powerOfTen *= 10;
-            exp++;
+            count++;
         }
+        return count;
     };
     SheetWallModelGenerator.prototype.findWallTypeLabel = function (wallLength) {
         var label = this.wallTypeLabelsByLength.get(wallLength.toString());
@@ -1250,10 +1266,10 @@ var SheetWallModelGenerator = /** @class */ (function () {
 /* harmony default export */ __webpack_exports__["a"] = (SheetWallModelGenerator);
 function createDirectionRankMap() {
     var map = {};
-    map[__WEBPACK_IMPORTED_MODULE_7_app_direction__["a" /* default */].NORTH.name] = 0;
-    map[__WEBPACK_IMPORTED_MODULE_7_app_direction__["a" /* default */].EAST.name] = 1;
-    map[__WEBPACK_IMPORTED_MODULE_7_app_direction__["a" /* default */].SOUTH.name] = 2;
-    map[__WEBPACK_IMPORTED_MODULE_7_app_direction__["a" /* default */].WEST.name] = 3;
+    map[__WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].NORTH.name] = 0;
+    map[__WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].EAST.name] = 1;
+    map[__WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].SOUTH.name] = 2;
+    map[__WEBPACK_IMPORTED_MODULE_1_app_direction__["a" /* default */].WEST.name] = 3;
     return map;
 }
 
@@ -1332,7 +1348,7 @@ var SheetWallTilingOptimizer = /** @class */ (function () {
         wall.translate(this.cursor);
         var wallLabel = this.sheetWallModel.wallLabels.get(wall);
         if (typeof wallLabel === "undefined") {
-            throw new Error("You forgot to add a shape to the wallLabels map: " + wall.toString());
+            throw new Error("You forgot to add a shape to the wallLabels map: ".concat(wall.toString()));
         }
         wallLabel.translate(new __WEBPACK_IMPORTED_MODULE_0_app_common_ordered_pair__["a" /* default */](this.cursor.x.add(wall.width.mul(__WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["a" /* HALF */])).sub(wallLabel.width.mul(__WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["a" /* HALF */])), this.cursor.y.add(this.wallHeight.mul(__WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["a" /* HALF */])).sub(wallLabel.height.mul(__WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["a" /* HALF */]))));
         this.sheetWallModel.walls.push(wall);
@@ -1497,6 +1513,7 @@ var HelpModalComponent = /** @class */ (function () {
     HelpModalComponent.prototype.close = function () {
         this.showHelpModal = false;
     };
+    var HelpModalComponent_1;
     HelpModalComponent.instances = [];
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */])(),
@@ -1511,11 +1528,9 @@ var HelpModalComponent = /** @class */ (function () {
             selector: "app-help-modal",
             template: __webpack_require__("./src/app/help-modal/help-modal.component.html"),
             styles: [__webpack_require__("./src/app/help-modal/help-modal.component.css")]
-        }),
-        __metadata("design:paramtypes", [])
+        })
     ], HelpModalComponent);
     return HelpModalComponent;
-    var HelpModalComponent_1;
 }());
 
 
@@ -1548,21 +1563,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 
 var HelpComponent = /** @class */ (function () {
+    // eslint-disable-next-line @typescript-eslint/no-extraneous-class
     function HelpComponent() {
     }
-    HelpComponent.prototype.ngOnInit = function () { };
     HelpComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: "app-help",
             template: __webpack_require__("./src/app/help/help.component.html"),
             styles: [__webpack_require__("./src/app/help/help.component.css")]
-        }),
-        __metadata("design:paramtypes", [])
+        })
+        // eslint-disable-next-line @typescript-eslint/no-extraneous-class
     ], HelpComponent);
     return HelpComponent;
 }());
@@ -1609,11 +1621,11 @@ var LightboxThumbnailComponent = /** @class */ (function () {
         var _this = this;
         this.thumbnail.nativeElement.onload = function () {
             var aspectRatio = _this.thumbnail.nativeElement.width / _this.thumbnail.nativeElement.height;
-            if (_this.thumbnailWidth) {
+            if (typeof _this.thumbnailWidth === "number") {
                 _this.thumbnail.nativeElement.setAttribute("width", _this.thumbnailWidth);
                 _this.thumbnail.nativeElement.setAttribute("height", Math.round(_this.thumbnailWidth / aspectRatio));
             }
-            else if (_this.thumbnailHeight) {
+            else if (typeof _this.thumbnailHeight === "number") {
                 _this.thumbnail.nativeElement.setAttribute("width", Math.round(_this.thumbnailHeight * aspectRatio));
                 _this.thumbnail.nativeElement.setAttribute("height", _this.thumbnailHeight);
             }
@@ -1650,8 +1662,7 @@ var LightboxThumbnailComponent = /** @class */ (function () {
             selector: "app-lightbox-thumbnail",
             template: __webpack_require__("./src/app/lightbox-thumbnail/lightbox-thumbnail.component.html"),
             styles: [__webpack_require__("./src/app/lightbox-thumbnail/lightbox-thumbnail.component.css")]
-        }),
-        __metadata("design:paramtypes", [])
+        })
     ], LightboxThumbnailComponent);
     return LightboxThumbnailComponent;
 }());
@@ -1691,16 +1702,16 @@ module.exports = "<div>\n    <p>To get started, enter some values for the maze d
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_app_algorithms_prims_algorithm__ = __webpack_require__("./src/app/algorithms/prims-algorithm.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_app_common_ordered_pair__ = __webpack_require__("./src/app/common/ordered-pair.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_app_common_unit__ = __webpack_require__("./src/app/common/unit.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_app_factories_linear_wall_model_generator__ = __webpack_require__("./src/app/factories/linear-wall-model-generator.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_app_factories_rectangular_wall_model_generator__ = __webpack_require__("./src/app/factories/rectangular-wall-model-generator.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_app_factories_sheet_wall_model_generator__ = __webpack_require__("./src/app/factories/sheet-wall-model-generator.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_app_factories_single_sheet_model_generator__ = __webpack_require__("./src/app/factories/single-sheet-model-generator.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_app_misc_big_util__ = __webpack_require__("./src/app/misc/big-util.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_app_models_calibration_rectangle__ = __webpack_require__("./src/app/models/calibration-rectangle.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_app_models_maze__ = __webpack_require__("./src/app/models/maze.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_app_models_maze_config__ = __webpack_require__("./src/app/models/maze-config.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_app_direction__ = __webpack_require__("./src/app/direction.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19_app_maze_printer__ = __webpack_require__("./src/app/maze-printer.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_app_direction__ = __webpack_require__("./src/app/direction.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_app_factories_linear_wall_model_generator__ = __webpack_require__("./src/app/factories/linear-wall-model-generator.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_app_factories_rectangular_wall_model_generator__ = __webpack_require__("./src/app/factories/rectangular-wall-model-generator.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_app_factories_sheet_wall_model_generator__ = __webpack_require__("./src/app/factories/sheet-wall-model-generator.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_app_factories_single_sheet_model_generator__ = __webpack_require__("./src/app/factories/single-sheet-model-generator.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_app_maze_printer__ = __webpack_require__("./src/app/maze-printer.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_app_misc_big_util__ = __webpack_require__("./src/app/misc/big-util.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_app_models_calibration_rectangle__ = __webpack_require__("./src/app/models/calibration-rectangle.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_app_models_maze__ = __webpack_require__("./src/app/models/maze.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19_app_models_maze_config__ = __webpack_require__("./src/app/models/maze-config.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20_app_print_mode__ = __webpack_require__("./src/app/print-mode.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1739,7 +1750,7 @@ var MazeBuilderComponent = /** @class */ (function () {
         this.mazeUnits = __WEBPACK_IMPORTED_MODULE_9_app_common_unit__["a" /* default */].values();
         this.rectangleUnits = [__WEBPACK_IMPORTED_MODULE_9_app_common_unit__["a" /* default */].INCHES, __WEBPACK_IMPORTED_MODULE_9_app_common_unit__["a" /* default */].CENTIMETERS];
         this.printModes = __WEBPACK_IMPORTED_MODULE_20_app_print_mode__["a" /* default */].values();
-        this.mazeConfig = new __WEBPACK_IMPORTED_MODULE_17_app_models_maze_config__["a" /* default */]();
+        this.mazeConfig = new __WEBPACK_IMPORTED_MODULE_19_app_models_maze_config__["a" /* default */]();
         this.printMode = __WEBPACK_IMPORTED_MODULE_20_app_print_mode__["a" /* default */].FLOOR_AND_WALL;
         this.randomSeed = "";
         this.maxWidth = 19.5;
@@ -1747,7 +1758,7 @@ var MazeBuilderComponent = /** @class */ (function () {
         this.maxPrinterUnits = __WEBPACK_IMPORTED_MODULE_9_app_common_unit__["a" /* default */].INCHES;
         this.ppu = 96;
         this.includeCalibrationRectangle = false;
-        this.calibrationRectangleConfig = new __WEBPACK_IMPORTED_MODULE_15_app_models_calibration_rectangle__["a" /* default */]();
+        this.calibrationRectangleConfig = new __WEBPACK_IMPORTED_MODULE_17_app_models_calibration_rectangle__["a" /* default */]();
         this.algorithms = [new __WEBPACK_IMPORTED_MODULE_4_app_algorithms_depth_first_search_algorithm__["a" /* default */](), new __WEBPACK_IMPORTED_MODULE_7_app_algorithms_prims_algorithm__["a" /* default */](), new __WEBPACK_IMPORTED_MODULE_6_app_algorithms_kruskals_algorithm__["a" /* default */](), new __WEBPACK_IMPORTED_MODULE_5_app_algorithms_empty_algorithm__["a" /* default */]()];
         this.currentAlgorithm = this.algorithms[0];
         this._showSvgPreview = false;
@@ -1763,14 +1774,14 @@ var MazeBuilderComponent = /** @class */ (function () {
         set: function (show) {
             this._showSvgPreview = show;
             if (show) {
-                window.ga("send", {
+                this.sendEvent({
                     hitType: "event",
                     eventCategory: "Designer",
                     eventAction: "showSvg"
                 });
             }
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     MazeBuilderComponent.prototype.consolidateConfigs = function () {
@@ -1816,15 +1827,15 @@ var MazeBuilderComponent = /** @class */ (function () {
             return;
         }
         var start = new Date().getTime();
-        var maze = new __WEBPACK_IMPORTED_MODULE_16_app_models_maze__["a" /* default */](this.mazeConfig.numCols, this.mazeConfig.numRows);
+        var maze = new __WEBPACK_IMPORTED_MODULE_18_app_models_maze__["a" /* default */](this.mazeConfig.numCols, this.mazeConfig.numRows);
         this.currentAlgorithm.seed = this.randomSeed.toString().length > 0 ? this.randomSeed : new Date().getTime();
         this.lastSeedUsed = this.currentAlgorithm.seed.toString();
         maze.build(this.currentAlgorithm);
-        console.log("seed used: " + this.currentAlgorithm.seed);
+        console.log("seed used: ".concat(this.currentAlgorithm.seed));
         this.maze = maze;
-        console.log("maze build time: " + (new Date().getTime() - start) + " ms");
+        console.log("maze build time: ".concat(new Date().getTime() - start, " ms"));
         if (this.trackEvents) {
-            window.ga("send", {
+            this.sendEvent({
                 hitType: "event",
                 eventCategory: "Designer",
                 eventAction: "build",
@@ -1864,16 +1875,16 @@ var MazeBuilderComponent = /** @class */ (function () {
         }
     };
     MazeBuilderComponent.prototype.getAdjacentCellDelta = function (direction) {
-        if (direction === __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].NORTH) {
+        if (direction === __WEBPACK_IMPORTED_MODULE_10_app_direction__["a" /* default */].NORTH) {
             return new __WEBPACK_IMPORTED_MODULE_8_app_common_ordered_pair__["a" /* default */](0, -1);
         }
-        else if (direction === __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].EAST) {
+        else if (direction === __WEBPACK_IMPORTED_MODULE_10_app_direction__["a" /* default */].EAST) {
             return new __WEBPACK_IMPORTED_MODULE_8_app_common_ordered_pair__["a" /* default */](1, 0);
         }
-        else if (direction === __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].SOUTH) {
+        else if (direction === __WEBPACK_IMPORTED_MODULE_10_app_direction__["a" /* default */].SOUTH) {
             return new __WEBPACK_IMPORTED_MODULE_8_app_common_ordered_pair__["a" /* default */](0, 1);
         }
-        else if (direction === __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].WEST) {
+        else if (direction === __WEBPACK_IMPORTED_MODULE_10_app_direction__["a" /* default */].WEST) {
             return new __WEBPACK_IMPORTED_MODULE_8_app_common_ordered_pair__["a" /* default */](-1, 0);
         }
         throw new Error("invalid direction");
@@ -1884,26 +1895,26 @@ var MazeBuilderComponent = /** @class */ (function () {
         }
         var multiplier = this.maxPrinterUnits.perInch.mul(this.ppu).div(this.mazeConfig.unit.perInch);
         var start = new Date().getTime();
-        var linearWallModelGenerator = new __WEBPACK_IMPORTED_MODULE_10_app_factories_linear_wall_model_generator__["a" /* default */](this.maze);
+        var linearWallModelGenerator = new __WEBPACK_IMPORTED_MODULE_11_app_factories_linear_wall_model_generator__["a" /* default */](this.maze);
         var linearWallModel = linearWallModelGenerator.generate();
-        var rectangularWallModelGenerator = new __WEBPACK_IMPORTED_MODULE_11_app_factories_rectangular_wall_model_generator__["a" /* default */](linearWallModel);
+        var rectangularWallModelGenerator = new __WEBPACK_IMPORTED_MODULE_12_app_factories_rectangular_wall_model_generator__["a" /* default */](linearWallModel);
         var rectangularWallModel = rectangularWallModelGenerator.generate();
         var mazePrinter;
         if (this.printMode === __WEBPACK_IMPORTED_MODULE_20_app_print_mode__["a" /* default */].FLOOR_AND_WALL) {
-            var sheetWallModelGenerator = new __WEBPACK_IMPORTED_MODULE_12_app_factories_sheet_wall_model_generator__["a" /* default */](rectangularWallModel);
+            var sheetWallModelGenerator = new __WEBPACK_IMPORTED_MODULE_13_app_factories_sheet_wall_model_generator__["a" /* default */](rectangularWallModel);
             sheetWallModelGenerator.hallWidth = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.hallWidth).mul(multiplier);
             sheetWallModelGenerator.materialThickness = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.materialThickness).mul(multiplier);
             sheetWallModelGenerator.maxHeight = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxHeight).mul(this.ppu);
             sheetWallModelGenerator.maxWidth = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxWidth).mul(this.ppu);
-            sheetWallModelGenerator.notchHeight = Object(__WEBPACK_IMPORTED_MODULE_14_app_misc_big_util__["c" /* min */])(this.maxPrinterUnits.perInch.mul(this.ppu).div(__WEBPACK_IMPORTED_MODULE_9_app_common_unit__["a" /* default */].MILLIMETERS.perInch).mul(4), new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.hallWidth).mul(multiplier).mul(".33"));
+            sheetWallModelGenerator.notchHeight = Object(__WEBPACK_IMPORTED_MODULE_16_app_misc_big_util__["c" /* min */])(this.maxPrinterUnits.perInch.mul(this.ppu).div(__WEBPACK_IMPORTED_MODULE_9_app_common_unit__["a" /* default */].MILLIMETERS.perInch).mul(4), new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.hallWidth).mul(multiplier).mul(".33"));
             sheetWallModelGenerator.separationSpace = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.separationSpace).mul(multiplier);
             sheetWallModelGenerator.wallHeight = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.wallHeight).mul(multiplier);
             var sheetWallModel = sheetWallModelGenerator.generate();
             this.outOfBounds = sheetWallModel.outOfBounds;
-            mazePrinter = new __WEBPACK_IMPORTED_MODULE_19_app_maze_printer__["a" /* default */](sheetWallModel, new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxWidth).mul(this.ppu), new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxHeight).mul(this.ppu), this.maxPrinterUnits, this.ppu);
+            mazePrinter = new __WEBPACK_IMPORTED_MODULE_15_app_maze_printer__["a" /* default */](sheetWallModel, new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxWidth).mul(this.ppu), new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxHeight).mul(this.ppu), this.maxPrinterUnits, this.ppu);
         }
         else if (this.printMode === __WEBPACK_IMPORTED_MODULE_20_app_print_mode__["a" /* default */].SINGLE_SHEET) {
-            var singleSheetModelGenerator = new __WEBPACK_IMPORTED_MODULE_13_app_factories_single_sheet_model_generator__["a" /* default */](rectangularWallModel);
+            var singleSheetModelGenerator = new __WEBPACK_IMPORTED_MODULE_14_app_factories_single_sheet_model_generator__["a" /* default */](rectangularWallModel);
             singleSheetModelGenerator.hallWidth = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.hallWidth).mul(multiplier);
             singleSheetModelGenerator.wallWidth = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.materialThickness).mul(multiplier);
             singleSheetModelGenerator.maxHeight = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxHeight).mul(this.ppu);
@@ -1911,7 +1922,7 @@ var MazeBuilderComponent = /** @class */ (function () {
             singleSheetModelGenerator.separationSpace = new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.mazeConfig.separationSpace).mul(multiplier);
             var singleSheetModel = singleSheetModelGenerator.generate();
             this.outOfBounds = singleSheetModel.outOfBounds;
-            mazePrinter = new __WEBPACK_IMPORTED_MODULE_19_app_maze_printer__["a" /* default */](singleSheetModel, new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxWidth).mul(this.ppu), new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxHeight).mul(this.ppu), this.maxPrinterUnits, this.ppu);
+            mazePrinter = new __WEBPACK_IMPORTED_MODULE_15_app_maze_printer__["a" /* default */](singleSheetModel, new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxWidth).mul(this.ppu), new __WEBPACK_IMPORTED_MODULE_2_big_js___default.a(this.maxHeight).mul(this.ppu), this.maxPrinterUnits, this.ppu);
         }
         else {
             console.error("impossible PrintMode enum: ", this.printMode);
@@ -1924,24 +1935,24 @@ var MazeBuilderComponent = /** @class */ (function () {
             this.rawSvgSrc = mazePrinter.printSvg(this.consolidateConfigs());
         }
         this.safeSvgSrc = this.sanitizer.bypassSecurityTrustHtml(this.rawSvgSrc);
-        console.info("svg export time: " + (new Date().getTime() - start) + " ms");
+        console.info("svg export time: ".concat(new Date().getTime() - start, " ms"));
         if (!this.autoGenerateSvg && this.trackEvents) {
-            window.ga("send", {
+            this.sendEvent({
                 hitType: "event",
                 eventCategory: "Designer",
                 eventAction: "export",
-                eventLabel: this.currentAlgorithm.name + "-" + this.printMode.name
+                eventLabel: "".concat(this.currentAlgorithm.name, "-").concat(this.printMode.name)
             });
         }
     };
     MazeBuilderComponent.prototype.downloadSvg = function () {
         var blob = new Blob([this.rawSvgSrc], { type: "image/svg+xml;charset=utf-8" });
         Object(__WEBPACK_IMPORTED_MODULE_3_file_saver__["saveAs"])(blob, "maze.svg");
-        window.ga("send", {
+        this.sendEvent({
             hitType: "event",
             eventCategory: "Designer",
             eventAction: "download",
-            eventLabel: this.currentAlgorithm.name + "-" + this.printMode.name
+            eventLabel: "".concat(this.currentAlgorithm.name, "-").concat(this.printMode.name)
         });
     };
     MazeBuilderComponent.prototype.benchmark = function () {
@@ -1961,30 +1972,36 @@ var MazeBuilderComponent = /** @class */ (function () {
         var threshold = .3;
         if (x < threshold) {
             if (y < threshold) {
-                return __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].NORTH;
+                return __WEBPACK_IMPORTED_MODULE_10_app_direction__["a" /* default */].NORTH;
             }
             else if (y > 1 - threshold) {
-                return __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].SOUTH;
+                return __WEBPACK_IMPORTED_MODULE_10_app_direction__["a" /* default */].SOUTH;
             }
-            return __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].WEST;
+            return __WEBPACK_IMPORTED_MODULE_10_app_direction__["a" /* default */].WEST;
         }
         else if (x > 1 - threshold) {
             if (y < threshold) {
-                return __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].NORTH;
+                return __WEBPACK_IMPORTED_MODULE_10_app_direction__["a" /* default */].NORTH;
             }
             else if (y > 1 - threshold) {
-                return __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].SOUTH;
+                return __WEBPACK_IMPORTED_MODULE_10_app_direction__["a" /* default */].SOUTH;
             }
-            return __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].EAST;
+            return __WEBPACK_IMPORTED_MODULE_10_app_direction__["a" /* default */].EAST;
         }
         if (y < threshold) {
-            return __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].NORTH;
+            return __WEBPACK_IMPORTED_MODULE_10_app_direction__["a" /* default */].NORTH;
         }
         if (y > 1 - threshold) {
-            return __WEBPACK_IMPORTED_MODULE_18_app_direction__["a" /* default */].SOUTH;
+            return __WEBPACK_IMPORTED_MODULE_10_app_direction__["a" /* default */].SOUTH;
         }
         return null;
     };
+    MazeBuilderComponent.prototype.sendEvent = function (payload) {
+        if (typeof window.ga === "function") {
+            window.ga("send", payload);
+        }
+    };
+    var MazeBuilderComponent_1;
     MazeBuilderComponent.AUTO_SVG_THRESHOLD_MS = 500;
     MazeBuilderComponent = MazeBuilderComponent_1 = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
@@ -1995,7 +2012,6 @@ var MazeBuilderComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["b" /* DomSanitizer */]])
     ], MazeBuilderComponent);
     return MazeBuilderComponent;
-    var MazeBuilderComponent_1;
 }());
 
 
@@ -2138,10 +2154,11 @@ var MazePrinter = /** @class */ (function () {
         return result;
     };
     MazePrinter.prototype.createConfigComment = function (configs) {
-        var comment = "<!--\n\tGenerated by Laser-Cut Mazes http://adashrod.github.io/LaserCutMazes on " + new Date().toISOString() + "\n";
+        // eslint-disable-next-line sequence/strict-camel-case
+        var comment = "<!--\n\tGenerated by Laser-Cut Mazes http://adashrod.github.io/LaserCutMazes on ".concat(new Date().toISOString(), "\n");
         for (var _i = 0, configs_1 = configs; _i < configs_1.length; _i++) {
             var config = configs_1[_i];
-            comment += "\t" + config[0] + ": " + config[1] + "\n";
+            comment += "\t".concat(config[0], ": ").concat(config[1], "\n");
         }
         comment += "-->\n";
         return comment;
@@ -2257,7 +2274,7 @@ var CalibrationRectangle = /** @class */ (function () {
             }
             this._width = Math.max(1, Math.floor(val));
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(CalibrationRectangle.prototype, "height", {
@@ -2277,7 +2294,7 @@ var CalibrationRectangle = /** @class */ (function () {
             }
             this._height = Math.max(1, Math.floor(val));
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(CalibrationRectangle.prototype, "unit", {
@@ -2292,7 +2309,7 @@ var CalibrationRectangle = /** @class */ (function () {
                 this._unit = __WEBPACK_IMPORTED_MODULE_0_app_common_unit__["a" /* default */].INCHES;
             }
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return CalibrationRectangle;
@@ -2325,7 +2342,7 @@ var Wall = /** @class */ (function () {
         }
     }
     Wall.prototype.toString = function () {
-        return "Wall[" + this.start.toString() + " to " + this.end.toString() + "]";
+        return "Wall[".concat(this.start.toString(), " to ").concat(this.end.toString(), "]");
     };
     return Wall;
 }());
@@ -2392,7 +2409,7 @@ var MazeConfig = /** @class */ (function () {
                 }
             }
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(MazeConfig.prototype, "numCols", {
@@ -2414,7 +2431,7 @@ var MazeConfig = /** @class */ (function () {
                 }
             }
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     MazeConfig.prototype.addChangeListener = function (listener) {
@@ -2549,7 +2566,7 @@ var Path = /** @class */ (function () {
             }
             return maximum.sub(minimum);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(Path.prototype, "height", {
@@ -2572,7 +2589,7 @@ var Path = /** @class */ (function () {
             }
             return maximum.sub(minimum);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Path.prototype.translate = function (delta) {
@@ -2587,7 +2604,7 @@ var Path = /** @class */ (function () {
         var builder = "";
         for (var _i = 0, _a = this.points; _i < _a.length; _i++) {
             var point = _a[_i];
-            builder += "(" + point.x + ", " + point.y + ") -> ";
+            builder += "(".concat(point.x, ", ").concat(point.y, ") -> ");
         }
         if (builder.length > 0) {
             builder = builder.substring(0, builder.length - 4);
@@ -2722,7 +2739,7 @@ var Shape = /** @class */ (function () {
             }
             return maximum.sub(minimum);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(Shape.prototype, "height", {
@@ -2748,7 +2765,7 @@ var Shape = /** @class */ (function () {
             }
             return maximum.sub(minimum);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(Shape.prototype, "maxHorizontalDisplacement", {
@@ -2765,7 +2782,7 @@ var Shape = /** @class */ (function () {
             }
             return maximum || __WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */];
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(Shape.prototype, "maxVerticalDisplacement", {
@@ -2782,7 +2799,7 @@ var Shape = /** @class */ (function () {
             }
             return maximum || __WEBPACK_IMPORTED_MODULE_1_app_misc_big_util__["b" /* ZERO */];
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Shape.prototype.translate = function (delta) {
@@ -2862,7 +2879,7 @@ var SheetWallModel = /** @class */ (function () {
             }
             return max;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(SheetWallModel.prototype, "maxVerticalDisplacement", {
@@ -2876,7 +2893,7 @@ var SheetWallModel = /** @class */ (function () {
             }
             return max;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return SheetWallModel;
@@ -2913,7 +2930,7 @@ var SingleSheetModel = /** @class */ (function () {
             }
             return max;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(SingleSheetModel.prototype, "maxVerticalDisplacement", {
@@ -2927,7 +2944,7 @@ var SingleSheetModel = /** @class */ (function () {
             }
             return max;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return SingleSheetModel;
@@ -2997,7 +3014,7 @@ var Space = /** @class */ (function () {
             case __WEBPACK_IMPORTED_MODULE_0_app_direction__["a" /* default */].WEST:
                 return this.westOpen;
             default:
-                throw new Error("invalid direction: " + direction);
+                throw new Error("invalid direction: ".concat(direction));
         }
     };
     Space.prototype.toString = function () {
@@ -3056,10 +3073,10 @@ var VectorNumber = /** @class */ (function () {
      */
     VectorNumber.characterToShape = function (c) {
         var shape = VectorNumber.charMap[c];
-        if (typeof shape !== "undefined") {
+        if (shape instanceof __WEBPACK_IMPORTED_MODULE_3_app_models_shape__["a" /* default */]) {
             return __WEBPACK_IMPORTED_MODULE_3_app_models_shape__["a" /* default */].copy(shape);
         }
-        throw new Error("\"" + c + "\" is not a valid character for VectorNumber");
+        throw new Error("\"".concat(c, "\" is not a valid character for VectorNumber"));
     };
     VectorNumber.prototype.translate = function (delta) {
         this.position.x = this.position.x.add(delta.x);
@@ -3259,7 +3276,7 @@ var Path = /** @class */ (function () {
         }
     }
     Path.prototype.toString = function () {
-        return "Path[(" + this.start.x + "," + this.start.y + ") -> (" + this.end.x + "," + this.end.y + "]";
+        return "Path[(".concat(this.start.x, ",").concat(this.start.y, ") -> (").concat(this.end.x, ",").concat(this.end.y, "]");
     };
     return Path;
 }());
@@ -3302,25 +3319,26 @@ var SvgElementGenerator = /** @class */ (function () {
         return result;
     };
     SvgElementGenerator.prototype.pathToSvgText = function (path, fpPrecision) {
+        var _a;
         var dAttrBuilder = "M";
         if (path.multiPartPath.length === 0) {
-            dAttrBuilder += " " + Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["d" /* roundAndStrip */])(path.start.x, fpPrecision) + "," + Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["d" /* roundAndStrip */])(path.start.y, fpPrecision) + " " +
-                (Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["d" /* roundAndStrip */])(path.end.x, fpPrecision) + "," + Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["d" /* roundAndStrip */])(path.end.y, fpPrecision));
+            dAttrBuilder += " ".concat(Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["d" /* roundAndStrip */])(path.start.x, fpPrecision), ",").concat(Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["d" /* roundAndStrip */])(path.start.y, fpPrecision), " ") +
+                "".concat(Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["d" /* roundAndStrip */])(path.end.x, fpPrecision), ",").concat(Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["d" /* roundAndStrip */])(path.end.y, fpPrecision));
         }
         else {
-            for (var _i = 0, _a = path.multiPartPath; _i < _a.length; _i++) {
-                var point = _a[_i];
-                dAttrBuilder += " " + Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["d" /* roundAndStrip */])(point.x, fpPrecision) + "," + Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["d" /* roundAndStrip */])(point.y, fpPrecision);
+            for (var _i = 0, _b = path.multiPartPath; _i < _b.length; _i++) {
+                var point = _b[_i];
+                dAttrBuilder += " ".concat(Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["d" /* roundAndStrip */])(point.x, fpPrecision), ",").concat(Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["d" /* roundAndStrip */])(point.y, fpPrecision));
             }
             if (path.multiPartPath[0].equals(path.multiPartPath[path.multiPartPath.length - 1])) {
                 dAttrBuilder += " Z"; // closed path
             }
         }
-        return "<path style=\"" + path.style + "\" d=\"" + dAttrBuilder + "\" id=\"" + (path.id || "") + "\"/>";
+        return "<path style=\"".concat(path.style, "\" d=\"").concat(dAttrBuilder, "\" id=\"").concat((_a = path.id) !== null && _a !== void 0 ? _a : "", "\"/>");
     };
     SvgElementGenerator.prototype.rectToSvgText = function (rect, fpPrecision) {
-        return "<rect style=\"" + rect.style + "\" x=\"" + Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["d" /* roundAndStrip */])(rect.x, fpPrecision) + "\" y=\"" + Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["d" /* roundAndStrip */])(rect.y, fpPrecision) + "\" " +
-            ("width=\"" + Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["d" /* roundAndStrip */])(rect.width, fpPrecision) + "\" height=\"" + Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["d" /* roundAndStrip */])(rect.height, fpPrecision) + "\"/>");
+        return "<rect style=\"".concat(rect.style, "\" x=\"").concat(Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["d" /* roundAndStrip */])(rect.x, fpPrecision), "\" y=\"").concat(Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["d" /* roundAndStrip */])(rect.y, fpPrecision), "\" ") +
+            "width=\"".concat(Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["d" /* roundAndStrip */])(rect.width, fpPrecision), "\" height=\"").concat(Object(__WEBPACK_IMPORTED_MODULE_2_app_misc_big_util__["d" /* roundAndStrip */])(rect.height, fpPrecision), "\"/>");
     };
     SvgElementGenerator.prototype.vectorNumberToSvgText = function (vectorNumber, fpPrecision) {
         var vnStr = vectorNumber.number.toString();
@@ -3369,12 +3387,15 @@ var TrackClickDirective = /** @class */ (function () {
     function TrackClickDirective() {
     }
     TrackClickDirective.prototype.onClick = function () {
-        window.ga("send", {
-            hitType: "event",
-            eventCategory: this.category,
-            eventAction: "externalLink",
-            eventLabel: this.label
-        });
+        var w = window;
+        if (typeof w.ga === "function") {
+            w.ga("send", {
+                hitType: "event",
+                eventCategory: this.category,
+                eventAction: "externalLink",
+                eventLabel: this.label
+            });
+        }
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */])(),
@@ -3393,8 +3414,7 @@ var TrackClickDirective = /** @class */ (function () {
     TrackClickDirective = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["s" /* Directive */])({
             selector: "[appTrackClick]"
-        }),
-        __metadata("design:paramtypes", [])
+        })
     ], TrackClickDirective);
     return TrackClickDirective;
 }());
@@ -3429,21 +3449,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 
 var WelcomeComponent = /** @class */ (function () {
+    // eslint-disable-next-line @typescript-eslint/no-extraneous-class
     function WelcomeComponent() {
     }
-    WelcomeComponent.prototype.ngOnInit = function () { };
     WelcomeComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: "app-welcome",
             template: __webpack_require__("./src/app/welcome/welcome.component.html"),
             styles: [__webpack_require__("./src/app/welcome/welcome.component.css")]
-        }),
-        __metadata("design:paramtypes", [])
+        })
+        // eslint-disable-next-line @typescript-eslint/no-extraneous-class
     ], WelcomeComponent);
     return WelcomeComponent;
 }());
@@ -3481,7 +3498,7 @@ if (__WEBPACK_IMPORTED_MODULE_3_environments_environment__["a" /* environment */
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* enableProdMode */])();
 }
 Object(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_2_app_app_module__["a" /* AppModule */])
-    .catch(function (err) { return console.log(err); });
+    .catch(function (err) { console.log(err); });
 
 
 /***/ }),
